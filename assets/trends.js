@@ -136,16 +136,16 @@ function lopsided(rows, dates) {
     heading: `${top.group.label} is the most one-sided race: ${top.fav.item} is at ${pct1(top.fav.implied_prob)}`,
     text: [
       `The tightest race is ${tight.group.label}, where the favorite, ${tight.fav.item}, is only at ${pct1(tight.fav.implied_prob)}. `
-      + `Each market's prices add up to more than 100%, from ${(Math.min(...totals) * 100).toFixed(0)}% to ${(Math.max(...totals) * 100).toFixed(0)}%, `
-      + "and the excess is the sportsbook's margin built into the prices.",
+      + `Only each market's ten shortest prices are tracked. Together they add up to between ${(Math.min(...totals) * 100).toFixed(0)}% and ${(Math.max(...totals) * 100).toFixed(0)}%, `
+      + "and since the prices include the sportsbook's margin this is not a complete probability split.",
     ],
-    how: `on the last day (${last}), for each market take the highest implied_prob among its items (the favorite's share) and the sum of implied_prob over all its items (the total). ${markets.length} markets have prices.`,
+    how: `on the last day (${last}), for each market take the highest implied_prob among its items (the favorite's share) and the sum of implied_prob over its tracked items (the ten shortest prices, or fewer in a small market). ${markets.length} markets have prices.`,
     chart: {
       title: "The favorite's share in each market", sub: `implied probability of the favorite, ${last}`,
-      draw: (host) => barChart(host, markets.map((m) => ({ label: `${m.group.label}: ${m.fav.item}`, value: m.fav.implied_prob, detail: `${m.n} candidates, prices total ${pct1(m.total)}` })), {
+      draw: (host) => barChart(host, markets.map((m) => ({ label: `${m.group.label}: ${m.fav.item}`, value: m.fav.implied_prob, detail: `${m.n} tracked, prices total ${pct1(m.total)}` })), {
         format: pct1, ariaLabel: "Bar chart of the favorite's implied probability in each market",
       }),
-      table: { headers: ["Market", "Favorite", "Share", "All prices total", "Candidates"], rows: markets.map((m) => [m.group.label, m.fav.item, pct1(m.fav.implied_prob), pct1(m.total), String(m.n)]) },
+      table: { headers: ["Market", "Favorite", "Share", "Tracked prices total", "Tracked"], rows: markets.map((m) => [m.group.label, m.fav.item, pct1(m.fav.implied_prob), pct1(m.total), String(m.n)]) },
     },
   });
 }

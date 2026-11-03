@@ -14,7 +14,7 @@ Built for the Financial Data Analytics data tracker project, with Claude Code.
 
 ## What is tracked
 
-13 markets, 539 items on the first day. Prices are DraftKings' American odds as published by ESPN.
+13 markets, and in each the **ten shortest prices** (the ten likeliest winners), so up to 130 items a day. The long tail of longshots (a market can have 90 candidates) is not tracked. Prices are DraftKings' American odds as published by ESPN.
 
 | League | Market | Who wins it | Stats kept with each item |
 |---|---|---|---|
@@ -38,8 +38,8 @@ Raw files are saved gzipped, in the format they came in, at `data/raw/<date>/<so
 
 | Source (file name) | Format | What it is | What is kept |
 |---|---|---|---|
-| `nba_futures`, `nfl_futures`, `ncaaf_futures` | JSON | The DraftKings futures board for the league. One call returns every market | All of it, as received. Only the tracked markets are used when building |
-| `nba_athletes`, `nfl_athletes`, `ncaaf_athletes` | JSON | One player or coach record per candidate (name, team), found through the links on the futures board | Every candidate's full record. Written as one file: `{"athletes": {id: record}}` |
+| `nba_futures`, `nfl_futures`, `ncaaf_futures` | JSON | The DraftKings futures board for the league. One call returns every market | **Only the tracked markets, and in each only the ten shortest prices.** The saved file keeps the board's JSON shape, cut down |
+| `nba_athletes`, `nfl_athletes`, `ncaaf_athletes` | JSON | One player or coach record per tracked candidate (name, team), found through the links on the futures board | Every tracked candidate's full record. Written as one file: `{"athletes": {id: record}}` |
 | `nba_stats` | JSON | NBA per-game season stats. One call lists every NBA player (about 300) | **Only the tracked candidates** (about 77 players) are kept, and the explanatory glossary is dropped |
 | `nfl_stats`, `ncaaf_stats` | JSON | Season stats, one call per candidate (the league-wide list is thousands of players) | Only the stat categories used (general, passing, rushing, receiving, defensive, interceptions), and each stat's name and value only. One file: `{"athletes": {id: record}}` |
 | `nba_standings`, `nfl_standings` | JSON | Standings: team names, win %, points for and against | All of it, as received |
@@ -75,7 +75,8 @@ python -m tracker.build
 ```
 
 This reads only `data/raw/` and rewrites `data/history.csv`. Running it again gives the same bytes, and if a
-rule in `tracker/convert.py` or `tracker/build.py` changes, the change applies to every day. A source with
+rule in `tracker/convert.py` or `tracker/build.py` changes, the change applies to every day. The top-ten rule is
+applied again here, so a raw file holding a longer board gives the same history. A source with
 no raw file on a day gives no rows from that league that day. A value a source does not report for an item
 is left empty. Rows are sorted by date, then `item_id`. If a day's athlete file is missing, names come from
 the earlier days; if there never was one, the name is the ESPN id.
@@ -94,7 +95,7 @@ One row per item per day. Dates are UTC (`YYYY-MM-DD`).
 | `award` | NBA: `mvp`, `roy`, `dpoy`, `coy`, `finals`. NFL: `mvp`, `opoy`, `dpoy`, `oroy`, `droy`, `sbwin`. College: `heisman`, `cfp` | code |
 | `team` | The item's team code (for a team market, the team itself) | code, e.g. `BUF` |
 | `odds` | DraftKings' price, American odds. `+200` wins 200 on a 100 stake, `-150` needs 150 to win 100 | American odds |
-| `implied_prob` | The probability the odds imply: `100 / (odds + 100)` for plus odds, `-odds / (-odds + 100)` for minus odds. Not adjusted for the sportsbook's margin, so a market's values add up to more than 1 | fraction, 0 to 1 |
+| `implied_prob` | The probability the odds imply: `100 / (odds + 100)` for plus odds, `-odds / (-odds + 100)` for minus odds. Not adjusted for the sportsbook's margin | fraction, 0 to 1 |
 | `gp` | Games played so far this season | games |
 | `ppg`, `rpg`, `apg` | NBA points, rebounds, assists per game (MVP, ROY) | per game |
 | `bpg`, `spg` | NBA blocks, steals per game (DPOY) | per game |
@@ -132,7 +133,9 @@ make every item look gone).
 - The **10 items with the biggest absolute move** are listed in the Issue and on the Today page, largest
   first (ties are broken by `item_id`). Items whose probability did not change are not listed.
 - An item on today's board that was not on the previous day's **appeared**; one on the previous day's board
-  that is not on today's **disappeared**. Both are listed in the Issue.
+  that is not on today's **disappeared**. Both are listed in the Issue. Because only the ten shortest prices in
+  each market are tracked, an item **appears** when its price moves into the top ten and **disappears** when it
+  drops out.
 
 The same rule is written in Python (`tracker/moves.py`) and in JavaScript (`computeMoves` in
 `assets/common.js`), so the Issue and the site agree.
