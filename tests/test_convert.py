@@ -4,8 +4,8 @@ from __future__ import annotations
 import pytest
 
 from conftest import (LINEBACKER, NBA, NCAAF, NFL, QB, RECEIVER, make_athletes, make_coaches,
-                      make_football_stats, make_futures, make_nba_stats, make_standings, make_teams,
-                      nba_board, nfl_board, ncaaf_board)
+                      make_football_stats, make_futures, make_nba_stats, make_records, make_standings,
+                      make_teams, nba_board, nfl_board, ncaaf_board)
 from tracker import convert
 
 
@@ -38,7 +38,7 @@ def test_nba_futures_keeps_only_the_four_awards():
 
 def test_futures_ignores_other_markets_and_duplicates():
     board = nba_board(mvp=[(1, "+200"), (1, "+999"), (2, "+400")])
-    rows = convert.convert_futures(board, NBA)   # the "NBA - Winner" team market is skipped
+    rows = convert.convert_futures(board, NBA)   # the conference-winner team market is skipped
     assert [(r["ref_id"], r["odds"]) for r in rows] == [("1", 200), ("2", 400)]
 
 
@@ -72,9 +72,18 @@ def test_nfl_offensive_and_defensive_awards_are_not_mixed_up():
     assert [r for r in nba_view if r["award"] in ("oroy", "droy")] == []
 
 
-def test_college_futures_heisman():
-    rows = convert.convert_futures(ncaaf_board([(9, "+150")]), NCAAF)
-    assert rows == [{"award": "heisman", "kind": "athlete", "ref_id": "9", "odds": 150}]
+def test_college_futures_heisman_and_playoff_champion():
+    rows = convert.convert_futures(ncaaf_board([(9, "+150")], cfp=[(61, "+350"), (87, "+550")]), NCAAF)
+    assert rows == [{"award": "heisman", "kind": "athlete", "ref_id": "9", "odds": 150},
+                    {"award": "cfp", "kind": "team", "ref_id": "61", "odds": 350},
+                    {"award": "cfp", "kind": "team", "ref_id": "87", "odds": 550}]  # Big Ten market skipped
+
+
+def test_nba_finals_is_the_plain_winner_market_not_conference_or_division_winners():
+    board = nba_board(finals=[(1, "+300"), (2, "+500")])     # also has an Eastern Conference Winner market
+    rows = convert.convert_futures(board, NBA)
+    assert [(r["award"], r["kind"], r["ref_id"], r["odds"]) for r in rows] == [
+        ("finals", "team", "1", 300), ("finals", "team", "2", 500)]
 
 
 # ----------------------------------------------------------------- athletes
@@ -149,6 +158,18 @@ def test_standings_fall_back_to_league_win_percent():
         {"team": {"id": "1", "abbreviation": "ATL", "displayName": "Atlanta"},
          "stats": [{"name": "leagueWinPercent", "value": 0.25}]}]}}]}
     assert convert.convert_standings(data)["1"]["win_pct"] == 0.25
+
+
+# ------------------------------------------------------------------- records
+
+def test_records_use_the_overall_record_only():
+    out = convert.convert_records(make_records({61: (0.875, 8, 328, 119)}))
+    assert out == {"61": {"win_pct": 0.875, "gp": 8, "pts_for": 328, "pts_against": 119}}  # not the home record
+
+
+def test_records_without_an_overall_item_are_skipped():
+    assert convert.convert_records({"teams": {"61": {"items": [{"name": "Home", "stats": []}]}}}) == {}
+    assert convert.convert_records({}) == {}
 
 
 # --------------------------------------------------------------------- teams

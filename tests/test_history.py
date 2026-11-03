@@ -68,6 +68,28 @@ def test_super_bowl_rows_are_teams_with_team_stats(raw_dir, tmp_path):
     assert (sb["win_pct"], sb["gp"], sb["pts_for"], sb["pts_against"]) == ("0.857", "7", "233", "181")
 
 
+def test_nba_finals_rows_are_teams_with_standings_stats(raw_dir, tmp_path):
+    full_day(raw_dir, "2026-11-03")
+    f = by_id(history_rows(raw_dir, tmp_path)[0])["nba-finals-2"]
+    assert (f["item"], f["team"], f["award"], f["odds"]) == ("Boston Celtics", "BOS", "finals", "500")
+    assert (f["win_pct"], f["gp"], f["pts_for"], f["pts_against"]) == ("0.875", "8", "900", "800")
+
+
+def test_cfp_rows_use_the_overall_record_and_team_names_from_the_teams_source(raw_dir, tmp_path):
+    full_day(raw_dir, "2026-11-03")
+    c = by_id(history_rows(raw_dir, tmp_path)[0])["ncaaf-cfp-61"]
+    assert (c["item"], c["team"], c["league"], c["odds"]) == ("Georgia Bulldogs", "UGA", "ncaaf", "350")
+    assert (c["win_pct"], c["gp"], c["pts_for"], c["pts_against"]) == ("0.875", "8", "328", "119")
+    assert c["pass_yds"] == "" and c["ppg"] == ""
+
+
+def test_cfp_without_the_records_source_keeps_names_but_empties_the_stats(raw_dir, tmp_path):
+    full_day(raw_dir, "2026-11-03", skip=("ncaaf_records",))
+    c = by_id(history_rows(raw_dir, tmp_path)[0])["ncaaf-cfp-2390"]
+    assert c["item"] == "Miami Hurricanes" and c["odds"] == "620"
+    assert c["win_pct"] == "" and c["gp"] == "" and c["pts_for"] == ""
+
+
 def test_heisman_row_gets_its_team_from_the_teams_source(raw_dir, tmp_path):
     full_day(raw_dir, "2026-11-03")
     h = by_id(history_rows(raw_dir, tmp_path)[0])["ncaaf-heisman-60"]
@@ -190,4 +212,4 @@ def test_source_names_cover_every_league():
     names = build.source_names()
     assert names == ["nba_futures", "nba_athletes", "nba_stats", "nba_standings", "nba_coaches",
                      "nfl_futures", "nfl_athletes", "nfl_stats", "nfl_standings",
-                     "ncaaf_futures", "ncaaf_athletes", "ncaaf_stats", "ncaaf_teams"]
+                     "ncaaf_futures", "ncaaf_athletes", "ncaaf_stats", "ncaaf_teams", "ncaaf_records"]

@@ -9,7 +9,8 @@ enrich it. All are public ESPN JSON endpoints, no login:
                         NBA: one call lists every player, filtered to the candidates
                         football: one call per candidate, trimmed to the stat categories used
   <league>_standings  team names, win percentage and points (NBA, NFL)
-  <league>_teams      team names for college players (college football has no standings source)
+  <league>_teams      team names for college players and playoff teams (no standings source)
+  <league>_records    each team's overall record and points, one call per playoff team (college)
   nba_coaches         which team each NBA coach belongs to (one call per team)
 
 Each fetcher returns a SourceResult and never raises, so one source failing cannot
@@ -211,6 +212,30 @@ def fetch_teams(cfg: League, season: int, team_ids: List[str], get: Getter = htt
     return result
 
 
+def fetch_records(cfg: League, season: int, team_ids: List[str], get: Getter = http_get) -> SourceResult:
+    """Overall record per team. The endpoint also lists home, away and conference records;
+    only the "overall" one is kept."""
+    result = SourceResult(source_name(cfg.code, "records"))
+    if not team_ids:
+        result.error = "no team markets to look up (futures failed)"
+        return result
+    found = _lookup_many({t: f"{cfg.core}/seasons/{season}/types/2/teams/{t}/record" for t in team_ids}, get)
+    kept = {}
+    for team_id, response in found.items():
+        overall = [item for item in response.get("items", []) if item.get("name") == "overall"]
+        if overall:
+            kept[team_id] = {"items": [{"name": "overall", "stats": [
+                {"name": s.get("name"), "value": s.get("value")} for s in overall[0].get("stats", [])]}]}
+    count = len(convert.convert_records({"teams": kept}))
+    if count == 0:
+        result.error = "no team record could be fetched"
+        return result
+    result.ok, result.count, result.body = True, count, _dump({"teams": kept})
+    if len(kept) < len(team_ids):
+        result.error = f"{len(team_ids) - len(kept)} team records failed"
+    return result
+
+
 def fetch_coaches(cfg: League, season: int, get: Getter = http_get) -> SourceResult:
     result = SourceResult(source_name(cfg.code, "coaches"))
     teams = _lookup_many({str(t): f"{cfg.core}/seasons/{season}/teams/{t}/coaches" for t in cfg.team_ids}, get)
@@ -233,6 +258,7 @@ def fetch_league(cfg: League, season: int, get: Getter = http_get) -> List[Sourc
     results.append(board)
     candidates = convert.convert_futures(_json(board.body), cfg) if board.ok else []
     people = sorted({c["ref_id"] for c in candidates if c["kind"] == "athlete"})
+    team_markets = sorted({c["ref_id"] for c in candidates if c["kind"] == "team"})
     athletes = fetch_athletes(cfg, season, people, get)
     results.append(athletes)
     results.append(fetch_stats(cfg, season, people, get))
@@ -240,8 +266,11 @@ def fetch_league(cfg: League, season: int, get: Getter = http_get) -> List[Sourc
         results.append(fetch_standings(cfg, season, get))
     if cfg.teams:
         records = _json(athletes.body)["athletes"] if athletes.ok else {}
-        team_ids = sorted({t for t in (v["team_id"] for v in convert.convert_athletes({"athletes": records}).values()) if t})
+        player_teams = {v["team_id"] for v in convert.convert_athletes({"athletes": records}).values()}
+        team_ids = sorted({t for t in player_teams | set(team_markets) if t})
         results.append(fetch_teams(cfg, season, team_ids, get))
+    if cfg.records:
+        results.append(fetch_records(cfg, season, team_markets, get))
     if cfg.coaches:
         results.append(fetch_coaches(cfg, season, get))
     return results

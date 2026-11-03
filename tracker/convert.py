@@ -216,6 +216,28 @@ def convert_teams(data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
     return out
 
 
+# ----------------------------------------------------------------- records
+
+def convert_records(data: Dict[str, Any]) -> Dict[str, Dict[str, Any]]:
+    """records file ({"teams": {id: response}}) -> {team_id: {win_pct, gp, pts_for, pts_against}}.
+
+    Uses each team's "overall" record (not home, away or conference), season totals.
+    """
+    out: Dict[str, Dict[str, Any]] = {}
+    for team_id, response in (data.get("teams") or {}).items():
+        for item in (response or {}).get("items", []):
+            if item.get("name") != "overall":
+                continue
+            stats = {s.get("name"): s.get("value") for s in item.get("stats", [])}
+            out[str(team_id)] = {
+                "win_pct": _num(stats.get("winPercent")),
+                "gp": _int(stats.get("gamesPlayed")),
+                "pts_for": _int(stats.get("pointsFor")),
+                "pts_against": _int(stats.get("pointsAgainst")),
+            }
+    return out
+
+
 # ----------------------------------------------------------------- coaches
 
 def convert_coaches(data: Dict[str, Any]) -> Dict[str, str]:

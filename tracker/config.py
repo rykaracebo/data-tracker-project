@@ -33,6 +33,7 @@ class League:
     coaches: bool             # has a coaches source (NBA Coach of the Year)
     teams: bool               # has a teams source (team names for players, when no standings)
     team_ids: List[int] = field(default_factory=list)  # ids to ask for coaches
+    records: bool = False     # has a records source (each team's overall record, one call per team)
 
     def season_for(self, date: dt.date) -> int:
         """ESPN's season number. NBA names a season by the year it ends (2026-27 is 2027);
@@ -68,8 +69,9 @@ LEAGUES: Dict[str, League] = {
         code="nba", name="NBA", sport="basketball", slug="nba",
         awards={"Regular Season MVP": "mvp", "Rookie of the Year": "roy",
                 "Defensive Player of the Year": "dpoy", "Coach of the Year": "coy"},
-        team_awards={},
-        labels={"mvp": "NBA MVP", "roy": "NBA ROY", "dpoy": "NBA DPOY", "coy": "NBA COY"},
+        team_awards={"NBA - Winner": "finals"},   # the NBA Finals winner (championship market)
+        labels={"mvp": "NBA MVP", "roy": "NBA ROY", "dpoy": "NBA DPOY", "coy": "NBA COY",
+                "finals": "NBA Finals"},
         bulk_stats=True, standings=True, coaches=True, teams=False,
         team_ids=list(range(1, 31)),  # ESPN team ids 1..30 are the 30 NBA teams
     ),
@@ -86,9 +88,9 @@ LEAGUES: Dict[str, League] = {
     "ncaaf": League(
         code="ncaaf", name="College football", sport="football", slug="college-football",
         awards={"Heisman Trophy": "heisman"},
-        team_awards={},
-        labels={"heisman": "Heisman"},
-        bulk_stats=False, standings=False, coaches=False, teams=True,
+        team_awards={"NCAA(F) - Championship": "cfp"},   # the College Football Playoff champion
+        labels={"heisman": "Heisman", "cfp": "CFP"},
+        bulk_stats=False, standings=False, coaches=False, teams=True, records=True,
     ),
 }
 
@@ -104,6 +106,7 @@ COLUMNS = [
 BASKETBALL_SCORING = ["ppg", "rpg", "apg"]
 FOOTBALL_OFFENSE = ["pass_yds", "rush_yds", "rec_yds", "td"]
 FOOTBALL_DEFENSE = ["tackles", "sacks", "ints"]
+TEAM_STATS = ["win_pct", "pts_for", "pts_against"]  # for team markets (a team wins the title)
 
 # Which stat columns each (league, award) carries. Everything else stays empty.
 AWARD_STATS = {
@@ -111,13 +114,15 @@ AWARD_STATS = {
     ("nba", "roy"): BASKETBALL_SCORING,
     ("nba", "dpoy"): ["bpg", "spg"],
     ("nba", "coy"): ["win_pct"],
+    ("nba", "finals"): TEAM_STATS,
     ("nfl", "mvp"): FOOTBALL_OFFENSE,
     ("nfl", "opoy"): FOOTBALL_OFFENSE,
     ("nfl", "oroy"): FOOTBALL_OFFENSE,
     ("nfl", "dpoy"): FOOTBALL_DEFENSE,
     ("nfl", "droy"): FOOTBALL_DEFENSE,
-    ("nfl", "sbwin"): ["win_pct", "pts_for", "pts_against"],
+    ("nfl", "sbwin"): TEAM_STATS,
     ("ncaaf", "heisman"): FOOTBALL_OFFENSE,
+    ("ncaaf", "cfp"): TEAM_STATS,
 }
 
 MOVES_LISTED = 10  # how many items the daily Issue lists

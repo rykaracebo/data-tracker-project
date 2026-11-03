@@ -5,7 +5,7 @@ import datetime as dt
 import json
 
 from conftest import (LINEBACKER, NBA, NCAAF, NFL, QB, make_athletes, make_coaches,
-                      make_football_stats, make_nba_stats, make_standings, make_teams, nba_board,
+                      make_football_stats, make_nba_stats, make_records, make_standings, make_teams, nba_board,
                       nfl_board, ncaaf_board)
 from tracker import convert, fetch
 
@@ -176,6 +176,26 @@ def test_teams_source_fetches_each_team_once():
     assert fetch.fetch_teams(NCAAF, 2026, [], get).ok is False
 
 
+def test_records_keep_only_the_overall_item_and_name_value_pairs():
+    calls = []
+    get = router([(("/record",), lambda url: {"items": [
+        {"name": "overall", "summary": "7-1", "stats": [{"name": "winPercent", "value": 0.875, "displayName": "x"},
+                                                        {"name": "gamesPlayed", "value": 8.0}]},
+        {"name": "Home", "stats": [{"name": "winPercent", "value": 1.0}]}]})], calls)
+    result = fetch.fetch_records(NCAAF, 2026, ["61", "2390"], get)
+    kept = json.loads(result.body)["teams"]["61"]["items"]
+    assert kept == [{"name": "overall", "stats": [{"name": "winPercent", "value": 0.875},
+                                                   {"name": "gamesPlayed", "value": 8.0}]}]
+    assert result.ok and result.count == 2 and len(calls) == 2
+    assert calls[0].endswith("/seasons/2026/types/2/teams/61/record") or calls[1].endswith("/seasons/2026/types/2/teams/61/record")
+
+
+def test_records_with_no_team_markets_or_no_overall_item_fail():
+    assert not fetch.fetch_records(NCAAF, 2026, [], router([])).ok
+    only_home = router([(("/record",), {"items": [{"name": "Home", "stats": []}]})])
+    assert not fetch.fetch_records(NCAAF, 2026, ["61"], only_home).ok
+
+
 def test_coaches_make_one_call_per_team():
     calls = []
     get = router([(("/coaches",), lambda url: make_coaches({1: 425})["teams"]["1"])], calls)
@@ -188,7 +208,8 @@ def test_coaches_make_one_call_per_team():
 def nba_routes():
     return [
         (("basketball/leagues/nba", "futures"), nba_board(mvp=[(10, "+200")], roy=[(20, "+300")],
-                                                           dpoy=[(30, "+500")], coy=[(40, "+650")])),
+                                                           dpoy=[(30, "+500")], coy=[(40, "+650")],
+                                                           finals=[(1, "+300")])),
         (("/coaches",), lambda url: make_coaches({1: 40})["teams"]["1"]),
         (("/athletes/",), lambda url: {"id": url.split("/athletes/")[1].split("?")[0], "fullName": "Somebody"}),
         (("byathlete",), make_nba_stats({10: dict(team="LAL", gp=7, pts=30.0, reb=8.0, ast=9.0, stl=1.0, blk=1.0)})),
@@ -217,17 +238,22 @@ def test_fetch_league_with_failed_futures_still_tries_the_independent_sources():
     assert results["nba_standings"].ok and results["nba_coaches"].ok
 
 
-def test_fetch_league_ncaaf_looks_up_the_teams_of_its_players():
+def test_fetch_league_ncaaf_looks_up_teams_of_players_and_playoff_markets():
+    calls = []
     routes = [
-        (("college-football", "futures"), ncaaf_board([(60, "+300")])),
+        (("college-football", "futures"), ncaaf_board([(60, "+300")], cfp=[(61, "+350")])),
         (("/athletes/60?",), {"id": "60", "fullName": "Colt College",
                                "team": {"$ref": "http://x/teams/2390?lang=en"}}),
         (("/athletes/60/statistics",), football_record(QB)),
+        (("/teams/61/record",), make_records({61: (0.875, 8, 328, 119)})["teams"]["61"]),
         (("/teams/2390",), {"id": "2390", "abbreviation": "MIA", "displayName": "Miami Hurricanes"}),
+        (("/teams/61",), {"id": "61", "abbreviation": "UGA", "displayName": "Georgia Bulldogs"}),
     ]
-    results = {r.name: r for r in fetch.fetch_league(NCAAF, 2026, router(routes))}
-    assert list(results) == ["ncaaf_futures", "ncaaf_athletes", "ncaaf_stats", "ncaaf_teams"]
+    results = {r.name: r for r in fetch.fetch_league(NCAAF, 2026, router(routes, calls))}
+    assert list(results) == ["ncaaf_futures", "ncaaf_athletes", "ncaaf_stats", "ncaaf_teams", "ncaaf_records"]
     assert all(r.ok for r in results.values()), {n: r.error for n, r in results.items()}
+    assert results["ncaaf_teams"].count == 2        # the player's team (2390) and the playoff team (61)
+    assert results["ncaaf_records"].count == 1
 
 
 def test_fetch_all_runs_every_league_and_one_league_failing_does_not_stop_the_rest():

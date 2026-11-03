@@ -20,7 +20,7 @@ from . import convert
 from .config import AWARD_STATS, COLUMNS, HISTORY_PATH, LEAGUES, RAW_DIR, League
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-KINDS = ("futures", "athletes", "stats", "standings", "teams", "coaches")
+KINDS = ("futures", "athletes", "stats", "standings", "teams", "records", "coaches")
 
 
 def source_name(league: str, kind: str) -> str:
@@ -37,6 +37,8 @@ def source_names() -> List[str]:
             names.append(source_name(code, "standings"))
         if cfg.teams:
             names.append(source_name(code, "teams"))
+        if cfg.records:
+            names.append(source_name(code, "records"))
         if cfg.coaches:
             names.append(source_name(code, "coaches"))
     return names
@@ -101,6 +103,7 @@ def build_league_day(cfg: League, date: str, raw: Dict[str, Optional[Dict[str, A
     teams = dict(standings)
     if raw.get("teams"):
         teams.update(convert.convert_teams(raw["teams"]))
+    records = convert.convert_records(raw["records"]) if raw.get("records") else {}
     coach_team = convert.convert_coaches(raw["coaches"]) if raw.get("coaches") else {}
 
     rows = []
@@ -119,12 +122,13 @@ def build_league_day(cfg: League, date: str, raw: Dict[str, Optional[Dict[str, A
         })
         wanted = AWARD_STATS.get((cfg.code, award), [])
         if entry["kind"] == "team":
-            team = standings.get(ref_id, {})
+            team = teams.get(ref_id, {})
+            record = records.get(ref_id) or standings.get(ref_id, {})   # overall record wins
             row["item"] = team.get("name") or ref_id
             row["team"] = team.get("team", "")
-            row["gp"] = team.get("gp")
+            row["gp"] = record.get("gp")
             for column in wanted:
-                row[column] = team.get(column)
+                row[column] = record.get(column)
         elif cfg.coaches and award == "coy":
             person = people.get(ref_id, {})
             row["item"] = person.get("name", ref_id)

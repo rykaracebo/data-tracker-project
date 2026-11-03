@@ -38,10 +38,12 @@ def make_futures(markets):
     return {"count": len(items), "items": items}
 
 
-def nba_board(mvp=None, roy=None, dpoy=None, coy=None, team_market=True):
+def nba_board(mvp=None, roy=None, dpoy=None, coy=None, finals=None, team_market=True):
     markets = []
-    if team_market:  # NBA has team markets too; they must be ignored
-        markets.append(("NBA - Winner", "team", [(9, "+290")]))
+    if team_market:  # NBA has other team markets too; they must be ignored
+        markets.append(("NBA - Eastern Conference - Winner", "team", [(9, "+290")]))
+    if finals is not None:  # the NBA Finals winner
+        markets.append(("NBA - Winner", "team", finals))
     for title, entries in (("NBA - Regular Season MVP", mvp), ("NBA - Rookie of the Year", roy),
                            ("NBA - Defensive Player of the Year", dpoy), ("NBA - Coach of the Year", coy)):
         if entries is not None:
@@ -62,8 +64,12 @@ def nfl_board(mvp=None, opoy=None, dpoy=None, oroy=None, droy=None, superbowl=No
     return make_futures(markets)
 
 
-def ncaaf_board(heisman):
-    return make_futures([("NCAA(F) - Heisman Trophy", "athlete", heisman)])
+def ncaaf_board(heisman, cfp=None):
+    markets = [("NCAA(F) - Heisman Trophy", "athlete", heisman),
+               ("NCAA(F) - Big Ten Conference", "team", [(9, "+200")])]   # an untracked team market
+    if cfp is not None:
+        markets.append(("NCAA(F) - Championship", "team", cfp))
+    return make_futures(markets)
 
 
 # ----------------------------------------------------------------- athletes
@@ -136,6 +142,17 @@ def make_standings(teams):
     return {"children": [{"name": "East", "children": [{"name": "Atlantic", "standings": {"entries": entries}}]}]}
 
 
+def make_records(teams):
+    """teams: {team_id: (win_pct, gp, pts_for, pts_against)} -> the records file layout
+    (each team's overall record plus a home record that must be ignored)."""
+    def stats(pct, gp, pf, pa):
+        return [{"name": "winPercent", "value": pct}, {"name": "gamesPlayed", "value": gp},
+                {"name": "pointsFor", "value": pf}, {"name": "pointsAgainst", "value": pa}]
+    return {"teams": {str(t): {"items": [
+        {"name": "overall", "stats": stats(*v)},
+        {"name": "Home", "stats": stats(0.0, 1, 1, 1)}]} for t, v in teams.items()}}
+
+
 def make_teams(teams):
     """teams: {team_id: (abbr, name)} -> the teams file layout."""
     return {"teams": {str(t): {"id": str(t), "abbreviation": a, "displayName": n} for t, (a, n) in teams.items()}}
@@ -161,7 +178,8 @@ def day_payloads(mvp_odds="+200"):
     return {
         # NBA: two MVPs (11 has no stats row), a ROY, a DPOY, two coaches
         "nba_futures": nba_board(mvp=[(10, mvp_odds), (11, "-150")], roy=[(20, "+300")],
-                                 dpoy=[(30, "+500")], coy=[(40, "+650"), (41, "+900")]),
+                                 dpoy=[(30, "+500")], coy=[(40, "+650"), (41, "+900")],
+                                 finals=[(1, "+300"), (2, "+500")]),
         "nba_athletes": make_athletes({10: ("Ann Alpha", 1), 11: ("Bo Beta", 2), 20: "Cy Gamma",
                                        30: "Di Delta", 40: "Coach Eps", 41: "Coach Zeta"}),
         "nba_stats": make_nba_stats({
@@ -180,16 +198,18 @@ def day_payloads(mvp_odds="+200"):
         "nfl_stats": make_football_stats({50: QB, 51: RECEIVER, 52: LINEBACKER, 54: LINEBACKER}),
         "nfl_standings": make_standings({7: ("BUF", "Buffalo Bills", 0.857, 6, 1, 233, 181),
                                          8: ("MIA", "Miami Dolphins", 0.25, 2, 6, 150, 220)}),
-        # College football: a Heisman board of one, with a team record for the team name
-        "ncaaf_futures": ncaaf_board([(60, "+300")]),
+        # College football: a Heisman board of one, and two playoff teams with records
+        "ncaaf_futures": ncaaf_board([(60, "+300")], cfp=[(2390, "+620"), (61, "+350")]),
         "ncaaf_athletes": make_athletes({60: ("Colt College", 2390)}),
         "ncaaf_stats": make_football_stats({60: QB}),
-        "ncaaf_teams": make_teams({2390: ("MIA", "Miami Hurricanes")}),
+        "ncaaf_teams": make_teams({2390: ("MIA", "Miami Hurricanes"), 61: ("UGA", "Georgia Bulldogs")}),
+        "ncaaf_records": make_records({2390: (1.0, 8, 381, 142), 61: (0.875, 8, 328, 119)}),
     }
 
 
-# 6 NBA items + 7 NFL items (5 award players + 2 teams) + 1 Heisman
-ITEMS_PER_DAY = 6 + 7 + 1
+# 8 NBA items (6 + 2 Finals teams), 7 NFL items (5 players + 2 Super Bowl teams),
+# 3 college items (1 Heisman + 2 playoff teams)
+ITEMS_PER_DAY = 8 + 7 + 3
 
 
 def full_day(raw_dir: Path, date: str, mvp_odds="+200", skip=()):

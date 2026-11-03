@@ -124,7 +124,7 @@ def test_new_today_and_gone_today_compare_with_the_previous_day(paths):
     newer = good_results()
     newer[0] = SourceResult("nba_futures", ok=True, count=5, body=json.dumps(nba_board(
         mvp=[(10, "+200"), (12, "+800")], roy=[(20, "+300")], dpoy=[(30, "+500")],
-        coy=[(40, "+650"), (41, "+900")])).encode())      # 11 left the MVP board, 12 joined
+        coy=[(40, "+650"), (41, "+900")], finals=[(1, "+300"), (2, "+500")])).encode())  # 11 left, 12 joined
     status = do_run(paths, 4, newer)
     assert status["new_today"] == ["nba-mvp-12"] and status["gone_today"] == ["nba-mvp-11"]
 
