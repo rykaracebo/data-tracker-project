@@ -195,3 +195,61 @@ def test_season_numbers():
     assert NFL.season_for(dt.date(2026, 11, 3)) == 2026      # 2026 NFL season
     assert NFL.season_for(dt.date(2027, 2, 1)) == 2026       # the playoffs are still the 2026 season
     assert NCAAF.season_for(dt.date(2026, 11, 3)) == 2026
+
+
+# ------------------------------------------------------------ the top-10 rule
+
+def long_board(n=15):
+    """An NBA MVP market with n candidates, listed longest price first (ids 1..n, +1000 down to +100*...)."""
+    return nba_board(mvp=[(i, f"+{i * 100}") for i in range(n, 0, -1)])
+
+
+def test_only_the_shortest_prices_in_each_market_are_kept():
+    rows = convert.convert_futures(long_board(15), NBA)
+    assert len(rows) == 10
+    assert [r["ref_id"] for r in rows] == [str(i) for i in range(1, 11)]   # +100 ... +1000, shortest first
+    assert all(r["odds"] <= 1000 for r in rows)
+
+
+def test_top_n_is_per_market_not_overall():
+    board = nba_board(mvp=[(i, f"+{i * 100}") for i in range(1, 16)],
+                      roy=[(100 + i, f"+{i * 100}") for i in range(1, 13)], coy=[(200, "+500")])
+    rows = convert.convert_futures(board, NBA)
+    counts = {a: sum(1 for r in rows if r["award"] == a) for a in ("mvp", "roy", "coy")}
+    assert counts == {"mvp": 10, "roy": 10, "coy": 1}      # a small market keeps everyone
+
+
+def test_minus_odds_are_the_shortest_prices():
+    board = nba_board(mvp=[(1, "+500"), (2, "-450"), (3, "+100"), (4, "-120")])
+    rows = convert.convert_futures(board, NBA, top_n=2)
+    assert [r["ref_id"] for r in rows] == ["2", "4"]       # -450 (81.8%) then -120 (54.5%)
+
+
+def test_ties_and_missing_prices_are_ranked_the_same_way_every_time():
+    board = nba_board(mvp=[(9, "+200"), (3, "+200"), (5, "n/a"), (7, "+200"), (1, "+300")])
+    rows = convert.convert_futures(board, NBA, top_n=4)
+    assert [r["ref_id"] for r in rows] == ["3", "7", "9", "1"]   # ties by id; the unpriced one is last, so cut
+    again = convert.convert_futures(board, NBA, top_n=4)
+    assert rows == again
+
+
+def test_top_n_none_keeps_everyone():
+    assert len(convert.convert_futures(long_board(15), NBA, top_n=None)) == 15
+
+
+def test_trim_futures_keeps_the_shape_but_only_tracked_markets_and_top_prices():
+    board = nba_board(mvp=[(i, f"+{i * 100}") for i in range(1, 16)], roy=[(50, "+300")])
+    trimmed = convert.trim_futures(board, NBA)
+    titles = [m["name"] for m in trimmed["items"]]
+    assert titles == ["NBA - Regular Season MVP", "NBA - Rookie of the Year"]   # the conference market is dropped
+    books = trimmed["items"][0]["futures"][0]["books"]
+    assert len(books) == 10 and trimmed["count"] == 2
+    assert trimmed["items"][0]["futures"][0]["provider"]["name"] == "DraftKings"
+    assert all("$ref" in b["athlete"] and "value" in b for b in books)           # the original book entries
+    # reading the trimmed board gives exactly what reading the full one gave
+    assert convert.convert_futures(trimmed, NBA) == convert.convert_futures(board, NBA)
+
+
+def test_trimming_twice_changes_nothing():
+    once = convert.trim_futures(long_board(25), NBA)
+    assert convert.trim_futures(once, NBA) == once

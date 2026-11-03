@@ -49,6 +49,30 @@ def test_futures_counts_candidates_and_keeps_the_body_as_received():
     assert json.loads(result.body)["items"]
 
 
+def test_futures_raw_file_holds_only_the_tracked_top_prices():
+    board = nba_board(mvp=[(i, f"+{i * 100}") for i in range(1, 31)], roy=[(99, "+250")])
+    result = fetch.fetch_futures(NBA, 2027, router([(("futures",), board)]))
+    kept = json.loads(result.body)
+    assert [m["name"] for m in kept["items"]] == ["NBA - Regular Season MVP", "NBA - Rookie of the Year"]
+    assert len(kept["items"][0]["futures"][0]["books"]) == 10      # 30 on the board, 10 kept
+    assert result.count == 11                                       # 10 MVP + 1 ROY
+
+
+def test_only_the_top_candidates_are_looked_up_afterwards():
+    """Athlete and stats calls are made for the 10 kept per market, not the whole board."""
+    calls = []
+    routes = [
+        (("futures",), nba_board(mvp=[(i, f"+{i * 100}") for i in range(1, 41)])),
+        (("/athletes/",), lambda url: {"id": url.split("/athletes/")[1].split("?")[0], "fullName": "X"}),
+        (("byathlete",), make_nba_stats({1: dict(team="LAL", gp=1, pts=1.0, reb=1.0, ast=1.0, stl=1.0, blk=1.0)})),
+        (("/standings",), make_standings({1: ("A", "Team A", 0.5, 1, 1, 1, 1)})),
+        (("/coaches",), make_coaches({1: 4})["teams"]["1"]),
+    ]
+    fetch.fetch_league(NBA, 2027, router(routes, calls))
+    asked = {u.split("/athletes/")[1].split("?")[0] for u in calls if "/athletes/" in u}
+    assert asked == {str(i) for i in range(1, 11)}
+
+
 def test_futures_with_no_tracked_markets_counts_as_a_failure():
     result = fetch.fetch_futures(NBA, 2027, router([(("futures",), {"items": []})]))
     assert not result.ok and result.body is None and result.error

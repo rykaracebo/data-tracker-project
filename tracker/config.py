@@ -127,6 +127,11 @@ AWARD_STATS = {
 
 MOVES_LISTED = 10  # how many items the daily Issue lists
 
+# Each market keeps only its TOP_N shortest prices (the likeliest winners); the long tail of
+# 40-to-90 longshots per market is not tracked. Applied when fetching (so the raw files hold
+# only what is tracked) and again when building (so any older, longer raw file gives the same history).
+TOP_N = 10
+
 
 def award_label(league: str, award: str) -> str:
     cfg = LEAGUES.get(league)

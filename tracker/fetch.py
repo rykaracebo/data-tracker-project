@@ -3,7 +3,7 @@
 Every league (NBA, NFL, college football) has a futures board plus the sources that
 enrich it. All are public ESPN JSON endpoints, no login:
 
-  <league>_futures    the DraftKings board: award prices (and Super Bowl winner prices)
+  <league>_futures    the DraftKings board, cut to the tracked markets and the TOP_N shortest prices in each
   <league>_athletes   one record per candidate, for the name and team (from the futures links)
   <league>_stats      season stats for the tracked candidates only
                         NBA: one call lists every player, filtered to the candidates
@@ -94,11 +94,13 @@ def _lookup_many(urls: Dict[str, str], get: Getter) -> Dict[str, Dict[str, Any]]
 def fetch_futures(cfg: League, season: int, get: Getter = http_get) -> SourceResult:
     result = SourceResult(source_name(cfg.code, "futures"))
     try:
-        body = get(f"{cfg.core}/seasons/{season}/futures?limit=100")
-        candidates = convert.convert_futures(_json(body), cfg)
+        board = _json(get(f"{cfg.core}/seasons/{season}/futures?limit=100"))
+        candidates = convert.convert_futures(board, cfg)
         if not candidates:
             raise ValueError("futures board has none of the tracked markets")
-        result.ok, result.count, result.body = True, len(candidates), body
+        # keep only what is tracked: the tracked markets, and in each the TOP_N shortest prices
+        result.ok, result.count = True, len(candidates)
+        result.body = _dump(convert.trim_futures(board, cfg))
     except Exception as error:
         result.error = f"{type(error).__name__}: {error}"
     return result

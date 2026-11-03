@@ -9,7 +9,7 @@ from __future__ import annotations
 import re
 from typing import Any, Dict, List, Optional
 
-from .config import League
+from .config import TOP_N, League
 
 
 def _num(value: Any, digits: int = 4) -> Optional[float]:
@@ -59,31 +59,78 @@ def implied_probability(odds: Optional[int]) -> Optional[float]:
 
 # ------------------------------------------------------------------ futures
 
-def convert_futures(data: Dict[str, Any], league: League) -> List[Dict[str, Any]]:
-    """ESPN futures board -> one dict per candidate in the league's tracked markets.
+def _market_candidates(market: Dict[str, Any], league: League):
+    """(award, kind, [candidate dicts]) for one futures market; award is None if not tracked.
+
+    Each candidate is {award, kind, ref_id, odds, book, provider}; book and provider are the
+    original JSON pieces, kept so a trimmed copy of the board can be written back out.
+    """
+    title = market.get("name") or market.get("displayName") or ""
+    award, kind = league.award_for(title)
+    if award is None:
+        return None, None, []
+    out: List[Dict[str, Any]] = []
+    seen = set()
+    for provider in market.get("futures", []):
+        for book in provider.get("books", []):
+            ref = (book.get("athlete") or book.get("team") or {}).get("$ref", "")
+            ref_id = id_from_ref(ref, "athletes" if kind == "athlete" else "teams")
+            if ref_id is None or ref_id in seen:
+                continue
+            seen.add(ref_id)
+            out.append({"award": award, "kind": kind, "ref_id": ref_id,
+                        "odds": parse_american_odds(book.get("value")),
+                        "book": book, "provider": provider})
+        if seen:
+            break  # first provider with prices wins (DraftKings, priority 1)
+    return award, kind, out
+
+
+def top_candidates(candidates: List[Dict[str, Any]], top_n: Optional[int]) -> List[Dict[str, Any]]:
+    """The `top_n` shortest prices (highest implied probability). Ties go by ESPN id, and a
+    candidate with no usable price ranks last, so the choice is the same on every run.
+    top_n=None keeps everyone."""
+    def key(c: Dict[str, Any]):
+        prob = implied_probability(c["odds"])
+        return (-(prob if prob is not None else -1.0), c["ref_id"])
+    ranked = sorted(candidates, key=key)
+    return ranked if top_n is None else ranked[:top_n]
+
+
+def convert_futures(data: Dict[str, Any], league: League, top_n: Optional[int] = TOP_N) -> List[Dict[str, Any]]:
+    """ESPN futures board -> one dict per tracked candidate: the `top_n` shortest prices
+    in each of the league's tracked markets.
 
     Returns [{award, kind, ref_id, odds}] where kind is 'athlete' (a player or coach
     wins it) or 'team' (a team wins it) and ref_id is that athlete's or team's ESPN id.
     """
     out: List[Dict[str, Any]] = []
     for market in data.get("items", []):
-        title = market.get("name") or market.get("displayName") or ""
-        award, kind = league.award_for(title)
+        award, _, candidates = _market_candidates(market, league)
         if award is None:
             continue
-        seen = set()
-        for provider in market.get("futures", []):
-            for book in provider.get("books", []):
-                ref = (book.get("athlete") or book.get("team") or {}).get("$ref", "")
-                ref_id = id_from_ref(ref, "athletes" if kind == "athlete" else "teams")
-                if ref_id is None or ref_id in seen:
-                    continue
-                seen.add(ref_id)
-                out.append({"award": award, "kind": kind, "ref_id": ref_id,
-                            "odds": parse_american_odds(book.get("value"))})
-            if seen:
-                break  # first provider with prices wins (DraftKings, priority 1)
+        for c in top_candidates(candidates, top_n):
+            out.append({k: c[k] for k in ("award", "kind", "ref_id", "odds")})
     return out
+
+
+def trim_futures(data: Dict[str, Any], league: League, top_n: Optional[int] = TOP_N) -> Dict[str, Any]:
+    """The futures board cut down to what is tracked: only the tracked markets, and in each only
+    the `top_n` shortest prices. Same JSON shape as the original, so convert_futures reads it unchanged."""
+    items = []
+    for market in data.get("items", []):
+        award, _, candidates = _market_candidates(market, league)
+        kept = top_candidates(candidates, top_n) if award else []
+        if not kept:
+            continue
+        provider = kept[0]["provider"]
+        items.append({
+            **{k: v for k, v in market.items() if k != "futures"},
+            "futures": [{**{k: v for k, v in provider.items() if k != "books"},
+                         "books": [c["book"] for c in kept]}],
+        })
+    return {**{k: v for k, v in data.items() if k not in ("items", "count")},
+            "count": len(items), "items": items}
 
 
 # ---------------------------------------------------------------- athletes

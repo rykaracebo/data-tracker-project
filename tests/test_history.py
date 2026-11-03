@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import csv
 
-from conftest import ITEMS_PER_DAY, full_day, write_raw, nba_board
+from conftest import ITEMS_PER_DAY, full_day, make_athletes, write_raw, nba_board
 from tracker import build
 from tracker.config import COLUMNS
 
@@ -213,3 +213,28 @@ def test_source_names_cover_every_league():
     assert names == ["nba_futures", "nba_athletes", "nba_stats", "nba_standings", "nba_coaches",
                      "nfl_futures", "nfl_athletes", "nfl_stats", "nfl_standings",
                      "ncaaf_futures", "ncaaf_athletes", "ncaaf_stats", "ncaaf_teams", "ncaaf_records"]
+
+
+def test_history_keeps_only_the_top_10_prices_per_market_even_from_a_long_raw_board(raw_dir, tmp_path):
+    """Raw files saved before the rule (or by hand) hold the whole board; the build still tracks 10."""
+    full_day(raw_dir, "2026-11-03")
+    write_raw(raw_dir, "2026-11-03", "nba_futures",
+              nba_board(mvp=[(i, f"+{i * 100}") for i in range(1, 41)], coy=[(40, "+650"), (41, "+900")]))
+    write_raw(raw_dir, "2026-11-03", "nba_athletes", make_athletes({i: f"Player {i}" for i in range(1, 41)}))
+    rows = [r for r in history_rows(raw_dir, tmp_path)[0] if r["league"] == "nba"]
+    mvps = sorted(int(r["item_id"].split("-")[-1]) for r in rows if r["award"] == "mvp")
+    assert mvps == list(range(1, 11))                        # the 10 shortest of 40
+    assert len([r for r in rows if r["award"] == "coy"]) == 2   # a small market keeps everyone
+
+
+def test_an_item_leaving_the_top_10_is_gone_and_one_entering_has_appeared(raw_dir, tmp_path):
+    def board(prices):
+        return nba_board(mvp=[(i, f"+{p}") for i, p in prices.items()])
+    base = {i: 100 * i for i in range(1, 11)}                 # ids 1..10
+    write_raw(raw_dir, "2026-11-03", "nba_futures", board({**base, 11: 1500}))     # 11 is just outside
+    write_raw(raw_dir, "2026-11-04", "nba_futures", board({**base, 10: 2000, 11: 950}))   # 11 passes 10
+    rows, _ = history_rows(raw_dir, tmp_path)
+    day1 = {r["item_id"] for r in rows if r["date"] == "2026-11-03"}
+    day2 = {r["item_id"] for r in rows if r["date"] == "2026-11-04"}
+    assert "nba-mvp-11" not in day1 and "nba-mvp-11" in day2
+    assert "nba-mvp-10" in day1 and "nba-mvp-10" not in day2
