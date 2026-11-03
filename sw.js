@@ -6,7 +6,7 @@
  *          and shows the last data it loaded. Cached data answers carry the header
  *          "x-from-cache: 1" so the pages can say they are showing saved data.
  */
-const CACHE = "nba-awards-v1";
+const CACHE = "award-odds-v1";
 
 const SHELL = [
   "./",
