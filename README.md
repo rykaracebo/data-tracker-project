@@ -40,7 +40,7 @@ Raw files are saved gzipped, in the format they came in, at `data/raw/<date>/<so
 |---|---|---|---|
 | `nba_futures`, `nfl_futures`, `ncaaf_futures` | JSON | The DraftKings futures board for the league. One call returns every market | **Only the tracked markets, and in each only the ten shortest prices.** The saved file keeps the board's JSON shape, cut down |
 | `nba_athletes`, `nfl_athletes`, `ncaaf_athletes` | JSON | One player or coach record per tracked candidate (name, team), found through the links on the futures board | Every tracked candidate's full record. Written as one file: `{"athletes": {id: record}}` |
-| `nba_stats` | JSON | NBA per-game season stats. One call lists every NBA player (about 300) | **Only the tracked candidates** (about 77 players) are kept, and the explanatory glossary is dropped |
+| `nba_stats` | JSON | NBA per-game season stats. One call lists every NBA player (about 300) | **Only the tracked candidates** (about 30 players) are kept, and the explanatory glossary is dropped |
 | `nfl_stats`, `ncaaf_stats` | JSON | Season stats, one call per candidate (the league-wide list is thousands of players) | Only the stat categories used (general, passing, rushing, receiving, defensive, interceptions), and each stat's name and value only. One file: `{"athletes": {id: record}}` |
 | `nba_standings`, `nfl_standings` | JSON | Standings: team names, win %, points for and against | All of it, as received |
 | `ncaaf_teams` | JSON | Team records for the teams of the tracked players and of the playoff market, for names and codes | One file: `{"teams": {id: record}}` |
