@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trends | Award Odds Tracker</title>
+<meta name="description" content="What the odds history says: who is rising, which day moved most, and whether stats line up with the prices.">
+<meta name="theme-color" content="#14213d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header id="site-nav"></header>
+<main class="wrap">
+<h1>Trends</h1>
+<p class="lede" id="trend-lede">Loading the history&hellip;</p>
+
+<section class="section" aria-labelledby="h-over-time">
+  <h2 id="h-over-time">Every value over the days</h2>
+  <p class="lede">Pick a market and up to eight items. Each chart shows one value across all the days in the history.</p>
+  <div class="picker" id="picker"></div>
+  <div class="chart-grid" id="series-charts"></div>
+</section>
+
+<div id="findings"></div>
+</main>
+<script type="module" src="assets/trends.js"></script>
+</body>
+</html>

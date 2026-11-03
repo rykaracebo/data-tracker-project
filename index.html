@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today | Award Odds Tracker</title>
+<meta name="description" content="Today's sportsbook odds for NBA, NFL and college football awards and title favorites, and what moved since the last run.">
+<meta name="theme-color" content="#14213d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header id="site-nav"></header>
+<main class="wrap">
+<h1>Today</h1>
+<p class="lede" id="asof">Loading the latest odds&hellip;</p>
+<div class="tiles" id="tiles"></div>
+
+<section class="section" aria-labelledby="h-sources">
+  <h2 id="h-sources">Sources</h2>
+  <p class="lede">Whether each data source answered on the last run, and how many items it gave.</p>
+  <ul class="sources" id="sources"></ul>
+</section>
+
+<section class="section" aria-labelledby="h-moves">
+  <h2 id="h-moves">Biggest moves</h2>
+  <p class="lede" id="moves-note"></p>
+  <div id="moves"></div>
+</section>
+
+<section class="section" aria-labelledby="h-latest">
+  <h2 id="h-latest">Latest values</h2>
+  <p class="lede">Every item on the latest day. The small arrows show the change since the previous run.</p>
+  <div class="controls" id="league-chips" role="group" aria-label="Show league"></div>
+  <div id="latest"></div>
+</section>
+</main>
+<script type="module" src="assets/index.js"></script>
+</body>
+</html>

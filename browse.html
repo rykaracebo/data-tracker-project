@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Browse | Award Odds Tracker</title>
+<meta name="description" content="Filter, search and sort every award and title candidate, and star the ones you want to follow.">
+<meta name="theme-color" content="#14213d">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="assets/icon-192.png">
+<link rel="apple-touch-icon" href="assets/icon-192.png">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header id="site-nav"></header>
+<main class="wrap">
+<h1>Browse</h1>
+<p class="lede">The latest values for every item. Filter, search, sort, and star the ones you want to keep an eye on.</p>
+
+<div class="controls" role="search">
+  <div class="field"><label for="q">Search names</label><input id="q" type="search" placeholder="e.g. Wembanyama" autocomplete="off"></div>
+  <div class="field"><label for="f-league">League</label><select id="f-league"></select></div>
+  <div class="field"><label for="f-award">Market</label><select id="f-award"></select></div>
+  <div class="field"><label for="f-team">Team</label><select id="f-team"></select></div>
+  <div class="field"><label for="sort-col">Sort by</label><select id="sort-col"></select></div>
+  <div class="field"><span class="label">Order</span><button class="btn" id="sort-dir" type="button" aria-label="Sort order"></button></div>
+  <label class="check"><input id="only-stars" type="checkbox"> Shortlist only <span class="muted" id="star-count"></span></label>
+  <button class="btn" id="reset" type="button">Reset filters</button>
+</div>
+
+<div class="count-line" id="count" role="status" aria-live="polite"></div>
+<div class="table-wrap"><table id="table"><caption class="sr-only">Latest values for every item</caption><thead></thead><tbody></tbody></table></div>
+</main>
+<script type="module" src="assets/browse.js"></script>
+</body>
+</html>
