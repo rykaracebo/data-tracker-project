@@ -513,7 +513,7 @@ date,item_id,item,source,league,award,team,odds,implied_prob,gp,ppg,rpg,apg,bpg,
 2026-11-03,nfl-sbwin-13,Las Vegas Raiders,nfl_futures,nfl,sbwin,LV,15000,0.006623,8,,,,,,0.5,,,,,,,,221,230
 2026-11-03,nfl-sbwin-14,Los Angeles Rams,nfl_futures,nfl,sbwin,LAR,1100,0.083333,8,,,,,,0.5,,,,,,,,194,168
 2026-11-03,nfl-sbwin-15,Miami Dolphins,nfl_futures,nfl,sbwin,MIA,100000,0.000999,7,,,,,,0.1429,,,,,,,,117,181
-2026-11-03,nfl-sbwin-16,Minnesota Vikings,nfl_futures,nfl,sbwin,MIN,1900,0.05,7,,,,,,0.8571,,,,,,,,140,93
+2026-11-03,nfl-sbwin-16,Minnesota Vikings,nfl_futures,nfl,sbwin,MIN,2200,0.043478,7,,,,,,0.8571,,,,,,,,140,93
 2026-11-03,nfl-sbwin-17,New England Patriots,nfl_futures,nfl,sbwin,NE,1900,0.05,8,,,,,,0.625,,,,,,,,184,162
 2026-11-03,nfl-sbwin-18,New Orleans Saints,nfl_futures,nfl,sbwin,NO,20000,0.004975,7,,,,,,0.2857,,,,,,,,162,194
 2026-11-03,nfl-sbwin-19,New York Giants,nfl_futures,nfl,sbwin,NYG,6500,0.015152,7,,,,,,0.6429,,,,,,,,163,161
@@ -524,11 +524,11 @@ date,item_id,item,source,league,award,team,odds,implied_prob,gp,ppg,rpg,apg,bpg,
 2026-11-03,nfl-sbwin-23,Pittsburgh Steelers,nfl_futures,nfl,sbwin,PIT,5000,0.019608,8,,,,,,0.75,,,,,,,,180,144
 2026-11-03,nfl-sbwin-24,Los Angeles Chargers,nfl_futures,nfl,sbwin,LAC,100000,0.000999,7,,,,,,0.0,,,,,,,,99,175
 2026-11-03,nfl-sbwin-25,San Francisco 49ers,nfl_futures,nfl,sbwin,SF,580,0.147059,7,,,,,,0.8571,,,,,,,,197,139
-2026-11-03,nfl-sbwin-26,Seattle Seahawks,nfl_futures,nfl,sbwin,SEA,1200,0.076923,8,,,,,,0.5,,,,,,,,185,159
+2026-11-03,nfl-sbwin-26,Seattle Seahawks,nfl_futures,nfl,sbwin,SEA,1250,0.074074,8,,,,,,0.5,,,,,,,,185,159
 2026-11-03,nfl-sbwin-27,Tampa Bay Buccaneers,nfl_futures,nfl,sbwin,TB,7400,0.013333,8,,,,,,0.375,,,,,,,,178,151
 2026-11-03,nfl-sbwin-28,Washington Commanders,nfl_futures,nfl,sbwin,WSH,12000,0.008264,7,,,,,,0.3571,,,,,,,,159,182
 2026-11-03,nfl-sbwin-29,Carolina Panthers,nfl_futures,nfl,sbwin,CAR,7000,0.014085,7,,,,,,0.4286,,,,,,,,178,193
-2026-11-03,nfl-sbwin-3,Chicago Bears,nfl_futures,nfl,sbwin,CHI,800,0.111111,8,,,,,,0.75,,,,,,,,214,160
+2026-11-03,nfl-sbwin-3,Chicago Bears,nfl_futures,nfl,sbwin,CHI,780,0.113636,8,,,,,,0.75,,,,,,,,214,160
 2026-11-03,nfl-sbwin-30,Jacksonville Jaguars,nfl_futures,nfl,sbwin,JAX,950,0.095238,7,,,,,,0.7143,,,,,,,,196,111
 2026-11-03,nfl-sbwin-33,Baltimore Ravens,nfl_futures,nfl,sbwin,BAL,10000,0.009901,8,,,,,,0.5,,,,,,,,179,203
 2026-11-03,nfl-sbwin-34,Houston Texans,nfl_futures,nfl,sbwin,HOU,3500,0.027778,7,,,,,,0.2857,,,,,,,,165,170
