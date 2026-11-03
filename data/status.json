@@ -1,0 +1,35 @@
+{
+  "run_time": "2026-11-03T22:21:51Z",
+  "first_run_date": "2026-11-03",
+  "days_with_success": 1,
+  "items": 124,
+  "new_today": [],
+  "gone_today": [],
+  "sources": [
+    {
+      "name": "futures",
+      "ok": true,
+      "count": 124
+    },
+    {
+      "name": "athletes",
+      "ok": true,
+      "count": 107
+    },
+    {
+      "name": "stats",
+      "ok": true,
+      "count": 77
+    },
+    {
+      "name": "standings",
+      "ok": true,
+      "count": 30
+    },
+    {
+      "name": "coaches",
+      "ok": true,
+      "count": 30
+    }
+  ]
+}

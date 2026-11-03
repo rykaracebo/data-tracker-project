@@ -1,0 +1,1 @@
+{"run_time": "2026-11-03T22:21:51Z", "date": "2026-11-03", "sources": [{"name": "futures", "ok": true, "count": 124, "error": ""}, {"name": "athletes", "ok": true, "count": 107, "error": ""}, {"name": "stats", "ok": true, "count": 77, "error": ""}, {"name": "standings", "ok": true, "count": 30, "error": ""}, {"name": "coaches", "ok": true, "count": 30, "error": ""}]}
