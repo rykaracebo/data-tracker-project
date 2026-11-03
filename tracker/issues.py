@@ -19,11 +19,10 @@ import tempfile
 from typing import Any, Callable, Dict, List, Optional, Sequence
 
 from . import build, moves
-from .config import MOVES_LISTED
+from .config import MOVES_LISTED, award_label
 
-TITLE_SUFFIX = "NBA award odds moves"
+TITLE_SUFFIX = "award odds moves"
 TITLE_RE = re.compile(r"^\d{4}-\d{2}-\d{2} " + re.escape(TITLE_SUFFIX) + "$")
-AWARD_NAMES = {"mvp": "MVP", "roy": "ROY", "dpoy": "DPOY", "coy": "COY"}
 
 
 def title_for(date: str) -> str:
@@ -40,13 +39,13 @@ def _pct(prob: float) -> str:
 
 
 def _label(row: Dict[str, Any]) -> str:
-    return f"{row.get('item', '')} ({AWARD_NAMES.get(row.get('award', ''), row.get('award', ''))})"
+    return f"{row.get('item', '')} ({award_label(row.get('league', ''), row.get('award', ''))})"
 
 
 def render_body(date: str, previous: Optional[str], result: Dict[str, Any],
                 status: Optional[Dict[str, Any]] = None) -> str:
     """The Issue text (Markdown)."""
-    lines = [f"## NBA award odds, {date}", ""]
+    lines = [f"## Award odds, {date}", ""]
     if previous is None:
         lines += ["This is the first day with data, so there is nothing to compare yet.", ""]
     else:

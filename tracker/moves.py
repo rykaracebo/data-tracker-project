@@ -54,6 +54,7 @@ def compute_moves(prev_rows: Sequence[Dict[str, Any]], today_rows: Sequence[Dict
         moves.append({
             "item_id": item_id,
             "item": new.get("item", ""),
+            "league": new.get("league", ""),
             "award": new.get("award", ""),
             "old_odds": old.get("odds", ""),
             "new_odds": new.get("odds", ""),

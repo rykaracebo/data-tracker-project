@@ -4,8 +4,8 @@ from __future__ import annotations
 from tracker import moves
 
 
-def row(item_id, prob, odds="+100", date="2026-11-03", item=None, award="mvp"):
-    return {"date": date, "item_id": item_id, "item": item or item_id, "award": award,
+def row(item_id, prob, odds="+100", date="2026-11-03", item=None, award="mvp", league="nba"):
+    return {"date": date, "item_id": item_id, "item": item or item_id, "league": league, "award": award,
             "odds": odds, "implied_prob": "" if prob is None else str(prob)}
 
 

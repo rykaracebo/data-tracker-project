@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Callable, Dict, List, Optional
 
 from . import build, status
-from .config import HISTORY_PATH, RAW_DIR, RUN_LOG_PATH, STATUS_PATH, season_for
+from .config import HISTORY_PATH, RAW_DIR, RUN_LOG_PATH, STATUS_PATH
 from .fetch import SourceResult, fetch_all
 
 
@@ -48,13 +48,13 @@ def append_log(path: Path, run_time: dt.datetime, date: str, results: List[Sourc
 
 
 def run(now: Optional[dt.datetime] = None,
-        fetcher: Callable[[int], List[SourceResult]] = fetch_all,
+        fetcher: Callable[[dt.date], List[SourceResult]] = fetch_all,
         raw_dir: Path = RAW_DIR, history_path: Path = HISTORY_PATH,
         status_path: Path = STATUS_PATH, log_path: Path = RUN_LOG_PATH) -> Dict:
     now = (now or dt.datetime.now(dt.timezone.utc)).astimezone(dt.timezone.utc)
     date = now.strftime("%Y-%m-%d")
 
-    results = fetcher(season_for(now.date()))            # 1. call every source
+    results = fetcher(now.date())                        # 1. call every source
     write_raw(raw_dir, date, results)
     rows = build.build_history(raw_dir, history_path)    # 2. build the history from raw files
     summary = status.make_status(now, date, [vars(r) for r in results], rows, raw_dir)
@@ -66,7 +66,7 @@ def run(now: Optional[dt.datetime] = None,
 if __name__ == "__main__":
     summary = run()
     for source in summary["sources"]:
-        print(f"{'ok  ' if source['ok'] else 'FAIL'} {source['name']:<10} {source['count']}")
+        print(f"{'ok  ' if source['ok'] else 'FAIL'} {source['name']:<18} {source['count']}")
     print(f"{summary['items']} items on {summary['run_time']}; "
           f"{summary['days_with_success']} day(s) with data")
     sys.exit(0)

@@ -17,10 +17,29 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from . import convert
-from .config import AWARD_STATS, COLUMNS, HISTORY_PATH, RAW_DIR
+from .config import AWARD_STATS, COLUMNS, HISTORY_PATH, LEAGUES, RAW_DIR, League
 
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-SOURCES = ("futures", "athletes", "stats", "standings", "coaches")
+KINDS = ("futures", "athletes", "stats", "standings", "teams", "coaches")
+
+
+def source_name(league: str, kind: str) -> str:
+    """Raw file / source name, e.g. nba_futures."""
+    return f"{league}_{kind}"
+
+
+def source_names() -> List[str]:
+    """Every source the pipeline calls, in run order."""
+    names = []
+    for code, cfg in LEAGUES.items():
+        names += [source_name(code, "futures"), source_name(code, "athletes"), source_name(code, "stats")]
+        if cfg.standings:
+            names.append(source_name(code, "standings"))
+        if cfg.teams:
+            names.append(source_name(code, "teams"))
+        if cfg.coaches:
+            names.append(source_name(code, "coaches"))
+    return names
 
 
 # ----------------------------------------------------------------- raw files
@@ -51,46 +70,86 @@ def read_raw(raw_dir: Path, date: str, source: str) -> Optional[Dict[str, Any]]:
 
 # ----------------------------------------------------------------- one day
 
-def build_day(date: str, raw: Dict[str, Optional[Dict[str, Any]]],
-              names: Dict[str, str]) -> List[Dict[str, Any]]:
-    """One day's raw sources -> one row per award candidate.
+class Names:
+    """Running id -> name maps per league, so a day whose athletes file failed still gets
+    names from earlier days (and, failing that, the id itself)."""
 
-    `names` is a running id -> name map. It is updated with today's athletes and
-    used as a fallback, so a day whose athletes file failed still gets names
-    from earlier days (and, failing that, the id itself).
+    def __init__(self) -> None:
+        self.people: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
+    def update(self, league: str, found: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+        known = self.people.setdefault(league, {})
+        known.update(found)
+        return known
+
+
+def build_league_day(cfg: League, date: str, raw: Dict[str, Optional[Dict[str, Any]]],
+                     names: Names) -> List[Dict[str, Any]]:
+    """One league's raw sources on one day -> one row per candidate on its futures board.
+
+    `raw` maps kind ('futures', 'athletes', ...) to the parsed file or None.
     """
     if raw.get("futures") is None:
         return []  # no futures file, no rows: the futures board is what makes the items
 
-    names.update(convert.convert_athletes(raw["athletes"]) if raw.get("athletes") else {})
-    stats = convert.convert_stats(raw["stats"]) if raw.get("stats") else {}
+    people = names.update(cfg.code, convert.convert_athletes(raw["athletes"]) if raw.get("athletes") else {})
+    if cfg.bulk_stats:
+        stats = convert.convert_stats(raw["stats"]) if raw.get("stats") else {}
+    else:
+        stats = convert.convert_football_stats(raw["stats"]) if raw.get("stats") else {}
     standings = convert.convert_standings(raw["standings"]) if raw.get("standings") else {}
+    teams = dict(standings)
+    if raw.get("teams"):
+        teams.update(convert.convert_teams(raw["teams"]))
     coach_team = convert.convert_coaches(raw["coaches"]) if raw.get("coaches") else {}
 
     rows = []
-    for entry in convert.convert_futures(raw["futures"]):
-        award, person = entry["award"], entry["person_id"]
+    for entry in convert.convert_futures(raw["futures"], cfg):
+        award, ref_id = entry["award"], entry["ref_id"]
         row: Dict[str, Any] = {c: "" for c in COLUMNS}
         row.update({
             "date": date,
-            "item_id": f"{award}-{person}",
-            "item": names.get(person, person),
-            "source": "futures",
+            "item_id": f"{cfg.code}-{award}-{ref_id}",
+            "item": ref_id,
+            "source": source_name(cfg.code, "futures"),
+            "league": cfg.code,
             "award": award,
             "odds": entry["odds"],
             "implied_prob": convert.implied_probability(entry["odds"]),
         })
-        if award == "coy":
-            team = standings.get(coach_team.get(person, ""), {})
+        wanted = AWARD_STATS.get((cfg.code, award), [])
+        if entry["kind"] == "team":
+            team = standings.get(ref_id, {})
+            row["item"] = team.get("name") or ref_id
             row["team"] = team.get("team", "")
-            row["win_pct"] = team.get("win_pct")
+            row["gp"] = team.get("gp")
+            for column in wanted:
+                row[column] = team.get(column)
+        elif cfg.coaches and award == "coy":
+            person = people.get(ref_id, {})
+            row["item"] = person.get("name", ref_id)
+            team = standings.get(coach_team.get(ref_id, ""), {})
+            row["team"] = team.get("team", "")
+            for column in wanted:
+                row[column] = team.get(column)
         else:
-            player = stats.get(person, {})
-            row["team"] = player.get("team", "")
+            person = people.get(ref_id, {})
+            row["item"] = person.get("name", ref_id)
+            player = stats.get(ref_id, {})
+            row["team"] = player.get("team") or teams.get(person.get("team_id") or "", {}).get("team", "")
             row["gp"] = player.get("gp")
-            for column in AWARD_STATS[award]:
+            for column in wanted:
                 row[column] = player.get(column)
         rows.append(row)
+    return rows
+
+
+def build_day(date: str, raw: Dict[str, Optional[Dict[str, Any]]], names: Names) -> List[Dict[str, Any]]:
+    """All leagues' rows for one day. `raw` is keyed by source name (nba_futures, ...)."""
+    rows: List[Dict[str, Any]] = []
+    for code, cfg in LEAGUES.items():
+        league_raw = {kind: raw.get(source_name(code, kind)) for kind in KINDS}
+        rows.extend(build_league_day(cfg, date, league_raw, names))
     return rows
 
 
@@ -98,10 +157,10 @@ def build_day(date: str, raw: Dict[str, Optional[Dict[str, Any]]],
 
 def build_rows(raw_dir: Path = RAW_DIR) -> List[Dict[str, Any]]:
     """Every day's rows, sorted by date then item_id."""
-    names: Dict[str, str] = {}
+    names = Names()
     rows: List[Dict[str, Any]] = []
     for date in raw_dates(raw_dir):
-        raw = {source: read_raw(raw_dir, date, source) for source in SOURCES}
+        raw = {source: read_raw(raw_dir, date, source) for source in source_names()}
         rows.extend(build_day(date, raw, names))
     rows.sort(key=lambda r: (r["date"], r["item_id"]))
     return rows
