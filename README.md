@@ -1,13 +1,13 @@
 # Award Odds Tracker
 
-[![Tests](https://github.com/OWNER/REPO/actions/workflows/tests.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/tests.yml)
+[![Tests](https://github.com/rykaracebo/data-tracker-project/actions/workflows/tests.yml/badge.svg)](https://github.com/rykaracebo/data-tracker-project/actions/workflows/tests.yml)
 
 Every day, on its own, this tool downloads sportsbook odds for **NBA, NFL and college football
 awards and title favorites**, together with the stats behind each race. It keeps a history with one
 row per item per day, reports what moved, opens a GitHub Issue about it, and publishes the result
 as an installable website.
 
-- **Live site:** `https://OWNER.github.io/REPO/`
+- **Live site:** `https://rykaracebo.github.io/data-tracker-project/`
 - **Data:** [`data/history.csv`](data/history.csv) and [`data/status.json`](data/status.json)
 
 Built for the Financial Data Analytics data tracker project, with Claude Code.
