@@ -1,35 +1,80 @@
 {
-  "run_time": "2026-11-03T22:21:51Z",
+  "run_time": "2026-11-03T22:40:29Z",
   "first_run_date": "2026-11-03",
   "days_with_success": 1,
-  "items": 124,
+  "items": 539,
   "new_today": [],
   "gone_today": [],
   "sources": [
     {
-      "name": "futures",
+      "name": "nba_futures",
       "ok": true,
-      "count": 124
+      "count": 154
     },
     {
-      "name": "athletes",
+      "name": "nba_athletes",
       "ok": true,
       "count": 107
     },
     {
-      "name": "stats",
+      "name": "nba_stats",
       "ok": true,
       "count": 77
     },
     {
-      "name": "standings",
+      "name": "nba_standings",
       "ok": true,
       "count": 30
     },
     {
-      "name": "coaches",
+      "name": "nba_coaches",
       "ok": true,
       "count": 30
+    },
+    {
+      "name": "nfl_futures",
+      "ok": true,
+      "count": 321
+    },
+    {
+      "name": "nfl_athletes",
+      "ok": true,
+      "count": 252
+    },
+    {
+      "name": "nfl_stats",
+      "ok": true,
+      "count": 247
+    },
+    {
+      "name": "nfl_standings",
+      "ok": true,
+      "count": 32
+    },
+    {
+      "name": "ncaaf_futures",
+      "ok": true,
+      "count": 64
+    },
+    {
+      "name": "ncaaf_athletes",
+      "ok": true,
+      "count": 22
+    },
+    {
+      "name": "ncaaf_stats",
+      "ok": true,
+      "count": 22
+    },
+    {
+      "name": "ncaaf_teams",
+      "ok": true,
+      "count": 42
+    },
+    {
+      "name": "ncaaf_records",
+      "ok": true,
+      "count": 42
     }
   ]
 }
