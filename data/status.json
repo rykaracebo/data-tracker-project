@@ -1,25 +1,25 @@
 {
-  "run_time": "2026-11-03T22:53:45Z",
+  "run_time": "2026-11-03T23:01:23Z",
   "first_run_date": "2026-11-03",
   "days_with_success": 1,
-  "items": 539,
+  "items": 130,
   "new_today": [],
   "gone_today": [],
   "sources": [
     {
       "name": "nba_futures",
       "ok": true,
-      "count": 154
+      "count": 50
     },
     {
       "name": "nba_athletes",
       "ok": true,
-      "count": 107
+      "count": 39
     },
     {
       "name": "nba_stats",
       "ok": true,
-      "count": 77
+      "count": 28
     },
     {
       "name": "nba_standings",
@@ -34,17 +34,17 @@
     {
       "name": "nfl_futures",
       "ok": true,
-      "count": 321
+      "count": 60
     },
     {
       "name": "nfl_athletes",
       "ok": true,
-      "count": 252
+      "count": 48
     },
     {
       "name": "nfl_stats",
       "ok": true,
-      "count": 247
+      "count": 48
     },
     {
       "name": "nfl_standings",
@@ -54,27 +54,27 @@
     {
       "name": "ncaaf_futures",
       "ok": true,
-      "count": 64
+      "count": 20
     },
     {
       "name": "ncaaf_athletes",
       "ok": true,
-      "count": 22
+      "count": 10
     },
     {
       "name": "ncaaf_stats",
       "ok": true,
-      "count": 22
+      "count": 10
     },
     {
       "name": "ncaaf_teams",
       "ok": true,
-      "count": 42
+      "count": 13
     },
     {
       "name": "ncaaf_records",
       "ok": true,
-      "count": 42
+      "count": 10
     }
   ]
 }
