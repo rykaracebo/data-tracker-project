@@ -5,3 +5,5 @@ __pycache__/
 .DS_Store
 # course handout, not part of the project
 FDA Data Tracker Project.pdf
+# submission file has a student ID; the repo is public
+submission.txt
