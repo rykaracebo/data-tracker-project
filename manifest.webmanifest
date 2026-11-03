@@ -1,7 +1,7 @@
 {
-  "name": "NBA Award Odds Tracker",
+  "name": "Award Odds Tracker",
   "short_name": "Award Odds",
-  "description": "Daily sportsbook odds for the NBA MVP, Rookie of the Year, Defensive Player of the Year and Coach of the Year awards.",
+  "description": "Daily sportsbook odds for NBA, NFL and college football awards and title favorites.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
