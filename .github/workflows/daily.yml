@@ -1,0 +1,57 @@
+name: Daily data update
+
+on:
+  schedule:
+    - cron: "23 9 * * *"   # once a day, 09:23 UTC
+  workflow_dispatch:        # lets you run it by hand from the Actions tab
+
+permissions:
+  contents: write   # commit the data files
+  issues: write     # open and close the daily Issue
+  pages: write      # ask Pages to rebuild after the commit
+
+concurrency:
+  group: daily-data
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 1-3. call every source, save raw files, rebuild history.csv, write status.json
+      - name: Fetch sources and build the history
+        run: python -m tracker.run
+
+      # 4. open today's Issue (or update it on a second run) and close yesterday's
+      - name: Open the daily Issue
+        continue-on-error: true   # a hiccup here must not stop the data from being committed
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python -m tracker.issues
+
+      # 5. commit the raw files, history and status
+      - name: Commit the data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data
+          if git diff --cached --quiet; then
+            echo "nothing changed, nothing to commit"
+          else
+            git commit -m "Daily data update $(date -u +%F)"
+            git pull --rebase
+            git push
+          fi
+
+      - name: Ask GitHub Pages to rebuild
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
