@@ -1,25 +1,49 @@
 {
-  "run_time": "2026-11-04T17:22:50Z",
+  "run_time": "2026-11-05T17:29:48Z",
   "first_run_date": "2026-11-03",
-  "days_with_success": 2,
-  "items": 130,
-  "new_today": [],
-  "gone_today": [],
+  "days_with_success": 3,
+  "items": 110,
+  "new_today": [
+    "ncaaf-heisman-5105849"
+  ],
+  "gone_today": [
+    "nba-coy-2613478",
+    "nba-coy-3024",
+    "nba-coy-3062",
+    "nba-coy-3116516",
+    "nba-coy-3612",
+    "nba-coy-425",
+    "nba-coy-4661",
+    "nba-coy-5277133",
+    "nba-coy-6809",
+    "nba-coy-866",
+    "nba-dpoy-3032976",
+    "nba-dpoy-3934719",
+    "nba-dpoy-4066261",
+    "nba-dpoy-4432158",
+    "nba-dpoy-4433134",
+    "nba-dpoy-4433136",
+    "nba-dpoy-4684740",
+    "nba-dpoy-4684742",
+    "nba-dpoy-4869342",
+    "nba-dpoy-5104157",
+    "ncaaf-heisman-5159175"
+  ],
   "sources": [
     {
       "name": "nba_futures",
       "ok": true,
-      "count": 50
+      "count": 30
     },
     {
       "name": "nba_athletes",
       "ok": true,
-      "count": 39
+      "count": 20
     },
     {
       "name": "nba_stats",
       "ok": true,
-      "count": 28
+      "count": 19
     },
     {
       "name": "nba_standings",
