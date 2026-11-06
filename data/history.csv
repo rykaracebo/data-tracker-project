@@ -369,3 +369,133 @@ date,item_id,item,source,league,award,team,odds,implied_prob,gp,ppg,rpg,apg,bpg,
 2026-11-05,nfl-sbwin-30,Jacksonville Jaguars,nfl_futures,nfl,sbwin,JAX,950,0.095238,7,,,,,,0.7143,,,,,,,,196,111
 2026-11-05,nfl-sbwin-4,Cincinnati Bengals,nfl_futures,nfl,sbwin,CIN,1400,0.066667,7,,,,,,0.7143,,,,,,,,206,158
 2026-11-05,nfl-sbwin-7,Denver Broncos,nfl_futures,nfl,sbwin,DEN,1600,0.058824,8,,,,,,0.75,,,,,,,,172,165
+2026-11-06,nba-coy-2613478,J.B. Bickerstaff,nba_futures,nba,coy,DET,1300,0.071429,,,,,,,0.75,,,,,,,,,
+2026-11-06,nba-coy-3024,JJ Redick,nba_futures,nba,coy,LAL,1300,0.071429,,,,,,,0.7778,,,,,,,,,
+2026-11-06,nba-coy-3062,Charles Lee,nba_futures,nba,coy,CHA,4000,0.02439,,,,,,,0.3333,,,,,,,,,
+2026-11-06,nba-coy-3116516,Darko Rajakovic,nba_futures,nba,coy,TOR,1400,0.066667,,,,,,,0.5,,,,,,,,,
+2026-11-06,nba-coy-3612,Mike Brown,nba_futures,nba,coy,NY,4500,0.021739,,,,,,,0.5,,,,,,,,,
+2026-11-06,nba-coy-425,Steve Kerr,nba_futures,nba,coy,GS,4000,0.02439,,,,,,,0.6667,,,,,,,,,
+2026-11-06,nba-coy-4661,Rick Carlisle,nba_futures,nba,coy,IND,3500,0.027778,,,,,,,0.3333,,,,,,,,,
+2026-11-06,nba-coy-5277133,Tuomas Iisalo,nba_futures,nba,coy,MEM,650,0.133333,,,,,,,0.75,,,,,,,,,
+2026-11-06,nba-coy-6809,Kenny Neil Atkinson,nba_futures,nba,coy,CLE,4000,0.02439,,,,,,,0.5,,,,,,,,,
+2026-11-06,nba-coy-866,Ime Udoka,nba_futures,nba,coy,HOU,750,0.117647,,,,,,,0.7778,,,,,,,,,
+2026-11-06,nba-dpoy-3032976,Rudy Gobert,nba_futures,nba,dpoy,MIN,3000,0.032258,8,,,,1.0,0.5,,,,,,,,,,
+2026-11-06,nba-dpoy-4066261,Bam Adebayo,nba_futures,nba,dpoy,MIA,4000,0.02439,9,,,,0.6667,2.0,,,,,,,,,,
+2026-11-06,nba-dpoy-4432158,Evan Mobley,nba_futures,nba,dpoy,CLE,5000,0.019608,8,,,,1.25,0.5,,,,,,,,,,
+2026-11-06,nba-dpoy-4433134,Scottie Barnes,nba_futures,nba,dpoy,TOR,2000,0.047619,8,,,,0.625,2.25,,,,,,,,,,
+2026-11-06,nba-dpoy-4433136,Walker Kessler,nba_futures,nba,dpoy,LAL,6000,0.016393,9,,,,2.6667,1.3333,,,,,,,,,,
+2026-11-06,nba-dpoy-4684740,Amen Thompson,nba_futures,nba,dpoy,HOU,7000,0.014085,9,,,,0.2222,1.2222,,,,,,,,,,
+2026-11-06,nba-dpoy-4684742,Ausar Thompson,nba_futures,nba,dpoy,DET,2000,0.047619,7,,,,0.5714,1.0,,,,,,,,,,
+2026-11-06,nba-dpoy-4869342,Dyson Daniels,nba_futures,nba,dpoy,ATL,5000,0.019608,9,,,,0.3333,2.6667,,,,,,,,,,
+2026-11-06,nba-dpoy-5104157,Victor Wembanyama,nba_futures,nba,dpoy,SA,-450,0.818182,8,,,,4.5,1.375,,,,,,,,,,
+2026-11-06,nba-dpoy-5105565,Donovan Clingan,nba_futures,nba,dpoy,POR,7000,0.014085,7,,,,2.4286,0.2857,,,,,,,,,,
+2026-11-06,nba-finals-10,Houston Rockets,nba_futures,nba,finals,HOU,1400,0.066667,9,,,,,,0.7778,,,,,,,,1061,968
+2026-11-06,nba-finals-13,Los Angeles Lakers,nba_futures,nba,finals,LAL,2500,0.038462,9,,,,,,0.7778,,,,,,,,1096,1025
+2026-11-06,nba-finals-16,Minnesota Timberwolves,nba_futures,nba,finals,MIN,1800,0.052632,9,,,,,,0.6667,,,,,,,,1069,968
+2026-11-06,nba-finals-18,New York Knicks,nba_futures,nba,finals,NY,1000,0.090909,8,,,,,,0.5,,,,,,,,880,841
+2026-11-06,nba-finals-2,Boston Celtics,nba_futures,nba,finals,BOS,1000,0.090909,8,,,,,,0.75,,,,,,,,914,866
+2026-11-06,nba-finals-20,Philadelphia 76ers,nba_futures,nba,finals,PHI,850,0.105263,9,,,,,,0.8889,,,,,,,,999,947
+2026-11-06,nba-finals-24,San Antonio Spurs,nba_futures,nba,finals,SA,290,0.25641,8,,,,,,0.75,,,,,,,,935,869
+2026-11-06,nba-finals-25,Oklahoma City Thunder,nba_futures,nba,finals,OKC,475,0.173913,8,,,,,,0.75,,,,,,,,880,870
+2026-11-06,nba-finals-28,Toronto Raptors,nba_futures,nba,finals,TOR,1600,0.058824,8,,,,,,0.5,,,,,,,,943,908
+2026-11-06,nba-finals-7,Denver Nuggets,nba_futures,nba,finals,DEN,2500,0.038462,7,,,,,,0.5714,,,,,,,,808,803
+2026-11-06,nba-mvp-3032977,Giannis Antetokounmpo,nba_futures,nba,mvp,MIA,2800,0.034483,9,27.3333,12.6667,5.5556,,,,,,,,,,,,
+2026-11-06,nba-mvp-3112335,Nikola Jokic,nba_futures,nba,mvp,DEN,900,0.1,7,23.4286,9.7143,9.2857,,,,,,,,,,,,
+2026-11-06,nba-mvp-3934672,Jalen Brunson,nba_futures,nba,mvp,NY,10000,0.009901,8,25.625,2.625,5.125,,,,,,,,,,,,
+2026-11-06,nba-mvp-3945274,Luka Doncic,nba_futures,nba,mvp,LAL,200,0.333333,8,38.5,8.125,8.0,,,,,,,,,,,,
+2026-11-06,nba-mvp-4065648,Jayson Tatum,nba_futures,nba,mvp,BOS,1000,0.090909,7,27.0,6.0,7.8571,,,,,,,,,,,,
+2026-11-06,nba-mvp-4278073,Shai Gilgeous-Alexander,nba_futures,nba,mvp,OKC,425,0.190476,8,30.125,4.25,4.5,,,,,,,,,,,,
+2026-11-06,nba-mvp-4431678,Tyrese Maxey,nba_futures,nba,mvp,PHI,4000,0.02439,9,28.0,3.7778,5.4444,,,,,,,,,,,,
+2026-11-06,nba-mvp-4432166,Cade Cunningham,nba_futures,nba,mvp,DET,4000,0.02439,8,24.0,5.625,7.625,,,,,,,,,,,,
+2026-11-06,nba-mvp-5041939,Cooper Flagg,nba_futures,nba,mvp,DAL,10000,0.009901,7,24.2857,6.2857,6.2857,,,,,,,,,,,,
+2026-11-06,nba-mvp-5104157,Victor Wembanyama,nba_futures,nba,mvp,SA,195,0.338983,8,29.0,12.375,3.125,,,,,,,,,,,,
+2026-11-06,nba-roy-5041935,Cameron Boozer,nba_futures,nba,roy,MEM,200,0.333333,8,16.5,9.75,5.375,,,,,,,,,,,,
+2026-11-06,nba-roy-5041955,Darryn Peterson,nba_futures,nba,roy,UTAH,2500,0.038462,8,12.625,4.0,3.75,,,,,,,,,,,,
+2026-11-06,nba-roy-5095151,Caleb Wilson,nba_futures,nba,roy,CHI,600,0.142857,8,19.5,6.5,2.375,,,,,,,,,,,,
+2026-11-06,nba-roy-5101761,Mikel Brown Jr.,nba_futures,nba,roy,BKN,10000,0.009901,6,12.0,2.3333,4.0,,,,,,,,,,,,
+2026-11-06,nba-roy-5142620,Darius Acuff Jr.,nba_futures,nba,roy,SAC,425,0.190476,8,25.625,3.75,7.0,,,,,,,,,,,,
+2026-11-06,nba-roy-5142718,AJ Dybantsa,nba_futures,nba,roy,WSH,850,0.105263,,,,,,,,,,,,,,,,
+2026-11-06,nba-roy-5149077,Kingston Flemings,nba_futures,nba,roy,ATL,10000,0.009901,8,8.0,2.875,4.625,,,,,,,,,,,,
+2026-11-06,nba-roy-5174983,Aday Mara,nba_futures,nba,roy,OKC,4000,0.02439,8,6.75,5.5,1.25,,,,,,,,,,,,
+2026-11-06,nba-roy-5175737,Yaxel Lendeborg,nba_futures,nba,roy,GS,270,0.27027,9,21.0,7.1111,4.1111,,,,,,,,,,,,
+2026-11-06,nba-roy-5254165,Keaton Wagler,nba_futures,nba,roy,LAC,7000,0.014085,8,12.0,4.125,3.25,,,,,,,,,,,,
+2026-11-06,ncaaf-cfp-145,Ole Miss Rebels,ncaaf_futures,ncaaf,cfp,MISS,1800,0.052632,8,,,,,,0.75,,,,,,,,297,192
+2026-11-06,ncaaf-cfp-194,Ohio State Buckeyes,ncaaf_futures,ncaaf,cfp,OSU,1000,0.090909,8,,,,,,0.75,,,,,,,,293,124
+2026-11-06,ncaaf-cfp-2390,Miami Hurricanes,ncaaf_futures,ncaaf,cfp,MIA,720,0.121951,8,,,,,,1.0,,,,,,,,381,142
+2026-11-06,ncaaf-cfp-251,Texas Longhorns,ncaaf_futures,ncaaf,cfp,TEX,1100,0.083333,8,,,,,,0.75,,,,,,,,246,137
+2026-11-06,ncaaf-cfp-254,Utah Utes,ncaaf_futures,ncaaf,cfp,UTAH,3000,0.032258,8,,,,,,1.0,,,,,,,,311,127
+2026-11-06,ncaaf-cfp-333,Alabama Crimson Tide,ncaaf_futures,ncaaf,cfp,ALA,1100,0.083333,8,,,,,,0.75,,,,,,,,306,170
+2026-11-06,ncaaf-cfp-61,Georgia Bulldogs,ncaaf_futures,ncaaf,cfp,UGA,340,0.227273,8,,,,,,0.875,,,,,,,,328,119
+2026-11-06,ncaaf-cfp-84,Indiana Hoosiers,ncaaf_futures,ncaaf,cfp,IU,1000,0.090909,9,,,,,,0.8889,,,,,,,,292,112
+2026-11-06,ncaaf-cfp-87,Notre Dame Fighting Irish,ncaaf_futures,ncaaf,cfp,ND,500,0.166667,8,,,,,,0.875,,,,,,,,323,107
+2026-11-06,ncaaf-cfp-99,LSU Tigers,ncaaf_futures,ncaaf,cfp,LSU,800,0.111111,8,,,,,,0.75,,,,,,,,321,128
+2026-11-06,ncaaf-heisman-4685578,Gunner Stockton,ncaaf_futures,ncaaf,heisman,UGA,4500,0.021739,8,,,,,,,1671,205,0,17,,,,,
+2026-11-06,ncaaf-heisman-4911529,Trinidad Chambliss,ncaaf_futures,ncaaf,heisman,MISS,1000,0.090909,8,,,,,,,2189,199,0,25,,,,,
+2026-11-06,ncaaf-heisman-4920227,Gio Lopez,ncaaf_futures,ncaaf,heisman,WAKE,7000,0.014085,8,,,,,,,2176,317,0,24,,,,,
+2026-11-06,ncaaf-heisman-5078810,Sam Leavitt,ncaaf_futures,ncaaf,heisman,LSU,3200,0.030303,8,,,,,,,2173,324,0,25,,,,,
+2026-11-06,ncaaf-heisman-5079369,CJ Carr,ncaaf_futures,ncaaf,heisman,ND,500,0.166667,8,,,,,,,1849,86,-5,21,,,,,
+2026-11-06,ncaaf-heisman-5079720,Jeremiah Smith,ncaaf_futures,ncaaf,heisman,OSU,150,0.4,8,,,,,,,0,7,1067,13,,,,,
+2026-11-06,ncaaf-heisman-5105849,Devon Dampier,ncaaf_futures,ncaaf,heisman,UTAH,10000,0.009901,8,,,,,,,1876,393,0,23,,,,,
+2026-11-06,ncaaf-heisman-5121169,Darian Mensah,ncaaf_futures,ncaaf,heisman,MIA,170,0.37037,8,,,,,,,2425,109,0,27,,,,,
+2026-11-06,ncaaf-heisman-5219834,Drew Mestemaker,ncaaf_futures,ncaaf,heisman,OKST,6000,0.016393,8,,,,,,,2649,166,0,27,,,,,
+2026-11-06,ncaaf-heisman-5289510,Jesse Legree,ncaaf_futures,ncaaf,heisman,ORST,8000,0.012346,8,,,,,,,0,0,1110,14,,,,,
+2026-11-06,nfl-dpoy-3045282,T.J. Watt,nfl_futures,nfl,dpoy,PIT,700,0.125,8,,,,,,,,,,,19,7.5,1,,
+2026-11-06,nfl-dpoy-3133487,Andrew Van Ginkel,nfl_futures,nfl,dpoy,MIN,3500,0.027778,7,,,,,,,,,,,21,6.5,1,,
+2026-11-06,nfl-dpoy-3138826,Fred Warner,nfl_futures,nfl,dpoy,SF,700,0.125,7,,,,,,,,,,,72,0.5,0,,
+2026-11-06,nfl-dpoy-3916655,Maxx Crosby,nfl_futures,nfl,dpoy,LV,2500,0.038462,8,,,,,,,,,,,22,3.0,0,,
+2026-11-06,nfl-dpoy-4035369,Jeffery Simmons,nfl_futures,nfl,dpoy,CHI,1000,0.090909,8,,,,,,,,,,,44,5.0,0,,
+2026-11-06,nfl-dpoy-4035483,Dexter Lawrence II,nfl_futures,nfl,dpoy,CIN,1600,0.058824,7,,,,,,,,,,,25,5.0,0,,
+2026-11-06,nfl-dpoy-4362506,Greg Rousseau,nfl_futures,nfl,dpoy,BUF,1400,0.066667,7,,,,,,,,,,,24,7.0,0,,
+2026-11-06,nfl-dpoy-4372099,Aidan Hutchinson,nfl_futures,nfl,dpoy,DET,1100,0.083333,7,,,,,,,,,,,21,5.0,0,,
+2026-11-06,nfl-dpoy-4565190,Dallas Turner,nfl_futures,nfl,dpoy,MIN,1400,0.066667,7,,,,,,,,,,,20,6.0,0,,
+2026-11-06,nfl-dpoy-4685724,Will Anderson Jr.,nfl_futures,nfl,dpoy,HOU,230,0.30303,7,,,,,,,,,,,33,7.5,0,,
+2026-11-06,nfl-droy-4429190,Akheem Mesidor,nfl_futures,nfl,droy,LAC,3500,0.027778,7,,,,,,,,,,,25,2.5,0,,
+2026-11-06,nfl-droy-4566094,Jacob Rodriguez,nfl_futures,nfl,droy,MIA,450,0.181818,7,,,,,,,,,,,69,0.0,1,,
+2026-11-06,nfl-droy-4685248,David Bailey,nfl_futures,nfl,droy,NYJ,300,0.25,7,,,,,,,,,,,35,5.5,0,,
+2026-11-06,nfl-droy-4837244,Gabe Jacas,nfl_futures,nfl,droy,NE,1200,0.076923,8,,,,,,,,,,,24,3.0,1,,
+2026-11-06,nfl-droy-4870617,Rueben Bain Jr.,nfl_futures,nfl,droy,TB,3500,0.027778,6,,,,,,,,,,,8,1.0,0,,
+2026-11-06,nfl-droy-4870706,Caleb Downs,nfl_futures,nfl,droy,DAL,4000,0.02439,8,,,,,,,,,,,52,1.0,0,,
+2026-11-06,nfl-droy-4870805,Anthony Hill Jr.,nfl_futures,nfl,droy,TEN,3000,0.032258,8,,,,,,,,,,,82,0.0,0,,
+2026-11-06,nfl-droy-4880124,Mansoor Delane,nfl_futures,nfl,droy,KC,2500,0.038462,5,,,,,,,,,,,27,0.0,1,,
+2026-11-06,nfl-droy-4954445,Dillon Thieneman,nfl_futures,nfl,droy,CHI,2000,0.047619,8,,,,,,,,,,,52,1.5,1,,
+2026-11-06,nfl-droy-5081807,Sonny Styles,nfl_futures,nfl,droy,WSH,700,0.125,7,,,,,,,,,,,54,1.0,1,,
+2026-11-06,nfl-mvp-3046779,Jared Goff,nfl_futures,nfl,mvp,DET,3000,0.032258,7,,,,,,,1964,15,0,16,,,,,
+2026-11-06,nfl-mvp-3139477,Patrick Mahomes,nfl_futures,nfl,mvp,KC,1800,0.052632,7,,,,,,,1795,77,0,13,,,,,
+2026-11-06,nfl-mvp-3915511,Joe Burrow,nfl_futures,nfl,mvp,CIN,475,0.173913,7,,,,,,,2115,70,0,22,,,,,
+2026-11-06,nfl-mvp-3918298,Josh Allen,nfl_futures,nfl,mvp,BUF,165,0.377358,7,,,,,,,1793,270,1,20,,,,,
+2026-11-06,nfl-mvp-4036378,Jordan Love,nfl_futures,nfl,mvp,GB,2500,0.038462,8,,,,,,,2246,10,0,17,,,,,
+2026-11-06,nfl-mvp-4360310,Trevor Lawrence,nfl_futures,nfl,mvp,JAX,800,0.111111,8,,,,,,,1932,79,0,18,,,,,
+2026-11-06,nfl-mvp-4361741,Brock Purdy,nfl_futures,nfl,mvp,SF,450,0.181818,7,,,,,,,1748,161,0,16,,,,,
+2026-11-06,nfl-mvp-4429795,Jahmyr Gibbs,nfl_futures,nfl,mvp,DET,6000,0.016393,7,,,,,,,0,773,285,10,,,,,
+2026-11-06,nfl-mvp-4431452,Drake Maye,nfl_futures,nfl,mvp,NE,1600,0.058824,8,,,,,,,1983,216,0,18,,,,,
+2026-11-06,nfl-mvp-4431611,Caleb Williams,nfl_futures,nfl,mvp,CHI,500,0.166667,5,,,,,,,1267,129,0,8,,,,,
+2026-11-06,nfl-opoy-3117251,Christian McCaffrey,nfl_futures,nfl,opoy,SF,4000,0.02439,7,,,,,,,0,389,251,8,,,,,
+2026-11-06,nfl-opoy-3918298,Josh Allen,nfl_futures,nfl,opoy,BUF,2000,0.047619,7,,,,,,,1793,270,1,20,,,,,
+2026-11-06,nfl-opoy-4241389,CeeDee Lamb,nfl_futures,nfl,opoy,DAL,3500,0.027778,8,,,,,,,0,-6,709,6,,,,,
+2026-11-06,nfl-opoy-4242335,Jonathan Taylor,nfl_futures,nfl,opoy,IND,3500,0.027778,8,,,,,,,0,610,202,8,,,,,
+2026-11-06,nfl-opoy-4426515,Puka Nacua,nfl_futures,nfl,opoy,LAR,2500,0.038462,6,,,,,,,0,21,565,4,,,,,
+2026-11-06,nfl-opoy-4429795,Jahmyr Gibbs,nfl_futures,nfl,opoy,DET,155,0.392157,7,,,,,,,0,773,285,10,,,,,
+2026-11-06,nfl-opoy-4430807,Bijan Robinson,nfl_futures,nfl,opoy,ATL,1100,0.083333,8,,,,,,,0,780,203,5,,,,,
+2026-11-06,nfl-opoy-4430878,Jaxon Smith-Njigba,nfl_futures,nfl,opoy,SEA,260,0.277778,8,,,,,,,14,29,985,9,,,,,
+2026-11-06,nfl-opoy-4567048,Kenneth Walker III,nfl_futures,nfl,opoy,KC,550,0.153846,7,,,,,,,0,770,131,8,,,,,
+2026-11-06,nfl-opoy-4595348,Malik Nabers,nfl_futures,nfl,opoy,NYG,3500,0.027778,7,,,,,,,0,0,605,2,,,,,
+2026-11-06,nfl-oroy-4685261,Germie Bernard,nfl_futures,nfl,oroy,PIT,2000,0.047619,8,,,,,,,0,4,284,1,,,,,
+2026-11-06,nfl-oroy-4685512,Jadarian Price,nfl_futures,nfl,oroy,SEA,4000,0.02439,4,,,,,,,0,148,29,0,,,,,
+2026-11-06,nfl-oroy-4686658,Mike Washington Jr.,nfl_futures,nfl,oroy,LV,2000,0.047619,8,,,,,,,0,278,11,1,,,,,
+2026-11-06,nfl-oroy-4702555,Jonah Coleman,nfl_futures,nfl,oroy,DEN,600,0.142857,4,,,,,,,0,134,97,2,,,,,
+2026-11-06,nfl-oroy-4723820,Omar Cooper Jr.,nfl_futures,nfl,oroy,NYJ,2000,0.047619,4,,,,,,,0,0,248,2,,,,,
+2026-11-06,nfl-oroy-4832955,Emmett Johnson,nfl_futures,nfl,oroy,KC,3000,0.032258,7,,,,,,,0,77,237,1,,,,,
+2026-11-06,nfl-oroy-4837248,Fernando Mendoza,nfl_futures,nfl,oroy,LV,1500,0.0625,1,,,,,,,48,3,0,0,,,,,
+2026-11-06,nfl-oroy-4869645,Caleb Douglas,nfl_futures,nfl,oroy,MIA,2500,0.038462,4,,,,,,,0,0,226,2,,,,,
+2026-11-06,nfl-oroy-4870653,KC Concepcion,nfl_futures,nfl,oroy,CLE,750,0.117647,8,,,,,,,0,34,352,0,,,,,
+2026-11-06,nfl-oroy-5081432,Antonio Williams,nfl_futures,nfl,oroy,WSH,2000,0.047619,7,,,,,,,0,0,259,1,,,,,
+2026-11-06,nfl-sbwin-12,Kansas City Chiefs,nfl_futures,nfl,sbwin,KC,1000,0.090909,7,,,,,,0.7143,,,,,,,,167,131
+2026-11-06,nfl-sbwin-14,Los Angeles Rams,nfl_futures,nfl,sbwin,LAR,1000,0.090909,8,,,,,,0.5,,,,,,,,194,168
+2026-11-06,nfl-sbwin-17,New England Patriots,nfl_futures,nfl,sbwin,NE,1900,0.05,8,,,,,,0.625,,,,,,,,184,162
+2026-11-06,nfl-sbwin-2,Buffalo Bills,nfl_futures,nfl,sbwin,BUF,600,0.142857,7,,,,,,0.8571,,,,,,,,233,181
+2026-11-06,nfl-sbwin-25,San Francisco 49ers,nfl_futures,nfl,sbwin,SF,550,0.153846,7,,,,,,0.8571,,,,,,,,197,139
+2026-11-06,nfl-sbwin-26,Seattle Seahawks,nfl_futures,nfl,sbwin,SEA,1600,0.058824,8,,,,,,0.5,,,,,,,,185,159
+2026-11-06,nfl-sbwin-3,Chicago Bears,nfl_futures,nfl,sbwin,CHI,780,0.113636,8,,,,,,0.75,,,,,,,,214,160
+2026-11-06,nfl-sbwin-30,Jacksonville Jaguars,nfl_futures,nfl,sbwin,JAX,900,0.1,8,,,,,,0.75,,,,,,,,229,121
+2026-11-06,nfl-sbwin-4,Cincinnati Bengals,nfl_futures,nfl,sbwin,CIN,1400,0.066667,7,,,,,,0.7143,,,,,,,,206,158
+2026-11-06,nfl-sbwin-7,Denver Broncos,nfl_futures,nfl,sbwin,DEN,1600,0.058824,8,,,,,,0.75,,,,,,,,172,165
